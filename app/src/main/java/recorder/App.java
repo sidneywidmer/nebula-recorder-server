@@ -1,7 +1,7 @@
 package recorder;
 
 import com.google.inject.Guice;
-import recorder.config.Bootstrap;
+import recorder.providers.Bootstrap;
 
 public class App {
     public static void main(String[] args) {

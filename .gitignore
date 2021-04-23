@@ -6,4 +6,4 @@ build
 
 # Other
 .idea
-app/.env
+app.conf

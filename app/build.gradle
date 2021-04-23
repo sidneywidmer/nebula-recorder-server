@@ -31,6 +31,7 @@ dependencies {
     implementation 'io.ebean:ebean:12.8.0'
     implementation 'io.ebean:ebean-migration:12.5.0'
     implementation 'org.postgresql:postgresql:42.2.16'
+    implementation 'com.typesafe:config:1.4.1'
 
     // query bean generation
     annotationProcessor 'io.ebean:querybean-generator:12.8.0'

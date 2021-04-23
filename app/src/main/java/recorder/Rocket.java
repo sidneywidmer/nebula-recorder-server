@@ -1,6 +1,6 @@
 package recorder;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import com.typesafe.config.Config;
 import io.javalin.Javalin;
 import recorder.web.Router;
 
@@ -9,24 +9,22 @@ import javax.inject.Inject;
 public class Rocket {
 
     private final Javalin app;
-    private final Dotenv dotenv;
-    private Router router;
+    private final Config config;
+    private final Router router;
 
     @Inject
     public Rocket(
             Javalin app,
-            Dotenv dotenv,
+            Config config,
             Router router
     ) {
         this.app = app;
-        this.dotenv = dotenv;
+        this.config = config;
         this.router = router;
     }
 
     public void launch() {
-        var port = Integer.parseInt(dotenv.get("SERVER_PORT"));
-
-        app.start(port);
+        app.start(config.getInt("server.port"));
         router.register(app);
     }
 }

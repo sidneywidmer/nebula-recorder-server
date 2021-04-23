@@ -14,6 +14,6 @@ public class WelcomeController {
         var user = new User("hello@sidney.dev");
         user.save();
 
-        ctx.render("templates/base.peb", model("user", user));
+        ctx.render("base.peb", model("user", user));
     }
 }
