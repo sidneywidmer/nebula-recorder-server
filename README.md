@@ -8,7 +8,7 @@ The project uses Java 16.
 
 - Clone repository
 - Copy `main/resources/app.example.conf` to `main/resources/app.conf` and fill out your settings
-- `gradle run`
+- `gradle build && gradle run`
 - Profit
 
 ## Documentation
@@ -17,7 +17,7 @@ The project uses Java 16.
 
 To really understand what happens inside of our application, we want to avoid heavy frameworks like Spring and instead follow the good old Linux Philosophy: Do one thing and do it right! In this spirit we're using a few key libraries (pulled in as gradle dependencies) and wire them together to have our own little framework - doing exactly what we want, and only that. 
 
-Find a short paragraph about how some of the core functionality is implemented and how its intended to be used.
+Find a short paragraph about how some of the core functionality is implemented and how its intended to be used bellow.
 
 ### Configuration
 

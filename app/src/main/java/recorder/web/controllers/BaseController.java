@@ -7,7 +7,9 @@ import io.javalin.http.Context;
 import recorder.core.exceptions.ApiException;
 import recorder.core.exceptions.InvalidDataException;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Set;
 
 public abstract class BaseController {
 
@@ -19,20 +21,22 @@ public abstract class BaseController {
     }
 
 
-    protected Object validate(Context ctx, Class clazz) throws ApiException {
+    protected <T> T validate(Context ctx, Class<T> clazz) throws ApiException {
         var objectMapper = new ObjectMapper();
-        Object instance = null;
+        T instance = null;
 
         try {
             instance = objectMapper.readValue(ctx.body(), clazz);
         } catch (JsonProcessingException e) {
             throw new ApiException();
         }
-        var violations = this.validator.validate(instance);
+
+        Set<ConstraintViolation<Object>> violations = this.validator.validate(instance);
 
         if (!violations.isEmpty()) {
             throw new InvalidDataException(violations);
         }
+
 
         return instance;
     }

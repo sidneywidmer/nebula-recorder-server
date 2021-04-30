@@ -7,6 +7,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class AuthController {
-    public void login(Context context) {
+    public void login(Context ctx) {
     }
 }
