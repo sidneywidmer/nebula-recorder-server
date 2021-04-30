@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 public class JavalinProvider implements Provider<Javalin> {
-
     private final PebbleEngine engine;
 
     @Inject

@@ -7,7 +7,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 public class ValidationProvider implements Provider<Validator> {
-
     @Override
     public Validator get() {
         var factory = Validation.buildDefaultValidatorFactory();

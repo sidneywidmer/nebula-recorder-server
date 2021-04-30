@@ -3,7 +3,6 @@ package recorder.domain.requests;
 import javax.validation.constraints.*;
 
 public class UserSignupRequest {
-
     @Email
     @NotBlank
     String email;
@@ -27,5 +26,4 @@ public class UserSignupRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

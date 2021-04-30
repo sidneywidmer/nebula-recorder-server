@@ -14,7 +14,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
 
 public class UserService {
-
     private final Hasher hasher;
 
     @Inject

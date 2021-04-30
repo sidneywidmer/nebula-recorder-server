@@ -43,5 +43,4 @@ public abstract class BaseModel extends Model {
     public void setWhenModified(Instant whenModified) {
         this.whenModified = whenModified;
     }
-
 }

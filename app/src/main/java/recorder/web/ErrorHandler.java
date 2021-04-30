@@ -23,7 +23,6 @@ public class ErrorHandler {
             ctx.json(model("message", "Malformed or invalid json given", "code", "json.invalid"));
         });
 
-
         app.exception(SystemException.class, (e, ctx) -> {
             ctx.status(500);
             ctx.json(model("message", "An error occurred on the server", "code", "system.error"));

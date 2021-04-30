@@ -12,7 +12,6 @@ import javax.validation.Validator;
 import java.util.Set;
 
 public abstract class BaseController {
-
     protected final Validator validator;
 
     @Inject
@@ -21,6 +20,10 @@ public abstract class BaseController {
     }
 
 
+    /**
+     * Tries to map the given ctx.body to our clazz and if this succeeds we trigger
+     * bean validation. If all goes well a clazz instance is returned.
+     */
     protected <T> T validate(Context ctx, Class<T> clazz) throws ApiException {
         var objectMapper = new ObjectMapper();
         T instance = null;
@@ -36,7 +39,6 @@ public abstract class BaseController {
         if (!violations.isEmpty()) {
             throw new InvalidDataException(violations);
         }
-
 
         return instance;
     }

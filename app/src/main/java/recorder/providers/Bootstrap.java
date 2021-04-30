@@ -10,7 +10,6 @@ import javax.validation.Validator;
 
 
 public class Bootstrap extends AbstractModule {
-
     /**
      * Register all our providers.
      */

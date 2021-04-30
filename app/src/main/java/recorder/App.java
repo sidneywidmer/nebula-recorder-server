@@ -10,7 +10,6 @@ import recorder.web.Router;
 import javax.inject.Inject;
 
 public class App {
-
     private final Javalin app;
     private final Config config;
     private final Router router;

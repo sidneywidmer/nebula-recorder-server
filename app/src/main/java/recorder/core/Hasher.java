@@ -8,7 +8,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 public class Hasher {
-
     /**
      * Create a salted PBKDF hash of given password string. The resulting hash is
      * returned as base64 encoded string.

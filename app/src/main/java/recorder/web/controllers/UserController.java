@@ -13,7 +13,6 @@ import javax.validation.Validator;
 
 @Singleton
 public class UserController extends BaseController {
-
     private final UserService userService;
 
     @Inject
@@ -28,5 +27,4 @@ public class UserController extends BaseController {
 
         ctx.status(200);
     }
-
 }

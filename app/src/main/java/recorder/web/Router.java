@@ -11,7 +11,6 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 
 public class Router {
-
     private final WelcomeController welcomeController;
     private final UserController userController;
     private final AuthController authController;
