@@ -8,7 +8,8 @@ import java.io.IOException;
 public class GenerateDbMigration {
 
     /**
-     * Generate the next "DB schema DIFF" migration.
+     * Generate the next "DB schema DIFF" migration. By convention this file has to
+     * be in the test folder but it's not actually a unittest.
      */
     public static void main(String[] args) throws IOException {
         var dbMigration = DbMigration.create();

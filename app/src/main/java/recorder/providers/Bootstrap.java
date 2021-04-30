@@ -6,6 +6,9 @@ import com.typesafe.config.Config;
 import io.ebean.Database;
 import io.javalin.Javalin;
 
+import javax.validation.Validator;
+
+
 public class Bootstrap extends AbstractModule {
 
     /**
@@ -15,6 +18,7 @@ public class Bootstrap extends AbstractModule {
         bind(Config.class).toProvider(ConfigProvider.class).asEagerSingleton();
         bind(Database.class).toProvider(DbProvider.class).asEagerSingleton();
         bind(PebbleEngine.class).toProvider(TemplateProvider.class).asEagerSingleton();
+        bind(Validator.class).toProvider(ValidationProvider.class).asEagerSingleton();
         bind(Javalin.class).toProvider(JavalinProvider.class).asEagerSingleton();
     }
 }

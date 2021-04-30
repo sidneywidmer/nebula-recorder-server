@@ -1,1 +1,1 @@
-Hallo {{ user.getEmail }}
+Hello World! Hello {{ user.email }}

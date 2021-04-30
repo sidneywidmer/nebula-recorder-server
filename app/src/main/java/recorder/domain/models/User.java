@@ -1,24 +1,23 @@
 package recorder.domain.models;
 
 
-import io.ebean.Model;
 import io.ebean.annotation.NotNull;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="users")
-public class User extends Model {
-    @Id
-    long id;
-
+@Table(name = "users")
+public class User extends BaseModel {
     @NotNull
     String email;
 
-    public User(String email) {
+    @NotNull
+    String password;
+
+    public User(String email, String password) {
         this.email = email;
+        this.password = password;
     }
 
     public String getEmail() {
@@ -28,4 +27,14 @@ public class User extends Model {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 }

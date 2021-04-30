@@ -32,6 +32,10 @@ dependencies {
     implementation 'io.ebean:ebean-migration:12.5.0'
     implementation 'org.postgresql:postgresql:42.2.16'
     implementation 'com.typesafe:config:1.4.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'
+    implementation 'org.glassfish:javax.el:3.0.0'
 
     // query bean generation
     annotationProcessor 'io.ebean:querybean-generator:12.8.0'
