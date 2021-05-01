@@ -1,1 +1,15 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nebula Recorder</title>
+    <link rel="stylesheet" type="text/css" href="/assets/main.css"/>
+  </head>
+  <body>
+    <main>
+      <h2>Nebula Recorder 💎️</h2>
+      <p>Placeholder for the upcoming project developed @ ZHAW.</p>
+    </main>
+  </body>
+</html>

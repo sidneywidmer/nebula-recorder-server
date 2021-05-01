@@ -23,6 +23,8 @@ public class JavalinProvider implements Provider<Javalin> {
     public Javalin get() {
         JavalinPebble.configure(engine);
 
-        return Javalin.create();
+        return Javalin.create(config -> {
+            config.addStaticFiles("static");
+        });
     }
 }
