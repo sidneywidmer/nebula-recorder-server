@@ -44,9 +44,18 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'recorder.App'
+    mainClass = 'ch.nebula.recorder.App'
 }
 
+task fatJar(type: Jar) {
+    duplicatesStrategy = 'include'
+    manifest {
+        attributes 'Main-Class': 'ch.nebula.recorder.App'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } with jar
+}
 
 task makeMigrations(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
