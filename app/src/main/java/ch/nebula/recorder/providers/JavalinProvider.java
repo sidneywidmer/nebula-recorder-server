@@ -1,6 +1,7 @@
 package ch.nebula.recorder.providers;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
+import com.typesafe.config.Config;
 import io.javalin.Javalin;
 import io.javalin.plugin.rendering.template.JavalinPebble;
 
@@ -9,10 +10,12 @@ import javax.inject.Provider;
 
 public class JavalinProvider implements Provider<Javalin> {
     private final PebbleEngine engine;
+    private final Config config;
 
     @Inject
-    public JavalinProvider(PebbleEngine engine) {
+    public JavalinProvider(PebbleEngine engine, Config config) {
         this.engine = engine;
+        this.config = config;
     }
 
     /**
@@ -23,8 +26,9 @@ public class JavalinProvider implements Provider<Javalin> {
     public Javalin get() {
         JavalinPebble.configure(engine);
 
-        return Javalin.create(config -> {
-            config.addStaticFiles("static");
+        return Javalin.create(cfg -> {
+            cfg.addStaticFiles("static");
+            cfg.enforceSsl = config.getBoolean("server.force-ssl");
         });
     }
 }
