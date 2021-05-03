@@ -1,5 +1,6 @@
 package ch.nebula.recorder.providers;
 
+import com.auth0.jwt.JWTVerifier;
 import com.google.inject.AbstractModule;
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.typesafe.config.Config;
@@ -17,6 +18,7 @@ public class Bootstrap extends AbstractModule {
         bind(Config.class).toProvider(ConfigProvider.class).asEagerSingleton();
         bind(Database.class).toProvider(DbProvider.class).asEagerSingleton();
         bind(Validator.class).toProvider(ValidationProvider.class).asEagerSingleton();
+        bind(JWTVerifier.class).toProvider(JWTProvider.class).asEagerSingleton();
         bind(Javalin.class).toProvider(JavalinProvider.class).asEagerSingleton();
     }
 }
