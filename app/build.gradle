@@ -36,6 +36,7 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'
     implementation 'org.glassfish:javax.el:3.0.0'
+    implementation 'org.thymeleaf:thymeleaf:3.0.11.RELEASE'
 
     // query bean generation
     annotationProcessor 'io.ebean:querybean-generator:12.8.0'

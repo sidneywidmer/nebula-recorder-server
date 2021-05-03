@@ -10,6 +10,6 @@ import static io.javalin.plugin.rendering.template.TemplateUtil.model;
 @Singleton
 public class WelcomeController {
     public void index(Context ctx) {
-        ctx.render("base.peb");
+        ctx.render("index.html");
     }
 }
