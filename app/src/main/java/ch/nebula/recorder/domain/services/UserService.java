@@ -6,12 +6,14 @@ import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.core.exceptions.SystemException;
 import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.models.query.QUser;
+import ch.nebula.recorder.domain.requests.LoginRequest;
 import ch.nebula.recorder.domain.requests.UserSignupRequest;
 
 import javax.inject.Inject;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserService {
     private final Hasher hasher;
@@ -32,6 +34,10 @@ public class UserService {
         newUser.save();
 
         return newUser;
+    }
+
+    public Optional<User> byEmailAndPassword(LoginRequest login) {
+        return new QUser().email.equalTo(login.getEmail()).findOneOrEmpty();
     }
 
     private String hashPassword(String password) throws SystemException {

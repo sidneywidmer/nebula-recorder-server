@@ -15,6 +15,8 @@ import static ch.nebula.recorder.domain.auth.AuthRoles.ANYONE;
 
 public class JWTAccessManager implements AccessManager {
     private final AuthService auth;
+    private final static String JWT_ATTR = "jwt-token";
+
 
     @Inject
     public JWTAccessManager(AuthService auth) {
@@ -28,7 +30,8 @@ public class JWTAccessManager implements AccessManager {
         if (permittedRoles.isEmpty() || permittedRoles.contains(ANYONE)) {
             handler.handle(ctx);
         } else {
-            this.auth.checkHeader(ctx.header("Authorization"));
+            var token = this.auth.getJWTFromHeader(ctx.header("Authorization"));
+            ctx.attribute(JWT_ATTR, token);
         }
 
         handler.handle(ctx);
