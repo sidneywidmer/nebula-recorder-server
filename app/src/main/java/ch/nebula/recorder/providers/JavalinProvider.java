@@ -27,7 +27,7 @@ public class JavalinProvider implements Provider<Javalin> {
         JavalinPebble.configure(engine);
 
         return Javalin.create(cfg -> {
-            cfg.addStaticFiles("static");
+            cfg.addStaticFiles("public");
             cfg.enforceSsl = config.getBoolean("server.force-ssl");
         });
     }

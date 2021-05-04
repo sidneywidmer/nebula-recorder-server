@@ -8,6 +8,7 @@ module.exports = {
             }
         }
     },
-    outputDir: path.resolve(__dirname, "../app/src/main/resources/templates"),
-    assetsDir: "../static"
+    outputDir: path.resolve(__dirname, "../app/src/main/resources/public"),
+    assetsDir: "",
+    publicPath: ""
 }
