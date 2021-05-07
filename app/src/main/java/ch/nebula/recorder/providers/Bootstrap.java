@@ -16,7 +16,6 @@ public class Bootstrap extends AbstractModule {
     protected void configure() {
         bind(Config.class).toProvider(ConfigProvider.class).asEagerSingleton();
         bind(Database.class).toProvider(DbProvider.class).asEagerSingleton();
-        bind(PebbleEngine.class).toProvider(TemplateProvider.class).asEagerSingleton();
         bind(Validator.class).toProvider(ValidationProvider.class).asEagerSingleton();
         bind(Javalin.class).toProvider(JavalinProvider.class).asEagerSingleton();
     }

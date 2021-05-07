@@ -1,0 +1,56 @@
+button {
+  font-family: 'Poppins', sans-serif !important;
+  margin-right: 3px;
+}
+.small-button {
+  padding: 7px !important;
+  font-size: 0.8rem;
+}
+.right-button {
+  float: right;
+}
+.black-border-button {
+  border: 1px solid black;
+  border-radius: 4px;
+  background: white;
+  font-size: 1rem;
+  padding: 15px;
+  cursor: pointer;
+}
+.white-border-button {
+  border: 1px solid white;
+  border-radius: 4px;
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  padding: 15px;
+  cursor: pointer;
+}
+.white-button {
+  border: none;
+  color: inherit;
+  border-radius: 4px;
+  background: white;
+  font-size: 1rem;
+  padding: 15px;
+  cursor: pointer;
+}
+.primary-button {
+  border: none;
+  color: white;
+  border-radius: 4px;
+  background: $primary;
+  font-size: 1rem;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.blue-button {
+  border: none;
+  color: white;
+  border-radius: 4px;
+  background: $blue;
+  font-size: 1rem;
+  padding: 15px;
+  cursor: pointer;
+}

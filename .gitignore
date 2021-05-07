@@ -7,3 +7,5 @@ build
 # Other
 .idea
 app.conf
+
+app/src/main/resources/public

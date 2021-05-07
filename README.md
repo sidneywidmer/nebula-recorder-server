@@ -8,6 +8,7 @@ The project uses Java 16.
 
 - Clone repository
 - Copy `main/resources/app.example.conf` to `main/resources/app.conf` and fill out your settings
+- Build frontend with `cd frontend && npm install && npm run build` this will copy the standalone FE in your `resources/public` folder, no template engine needed.
 - `gradle build && gradle run`
 - Profit
 
