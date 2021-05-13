@@ -15,6 +15,8 @@ public class User extends BaseModel {
     @NotNull
     String password;
 
+    String activationCode;
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
@@ -34,5 +36,13 @@ public class User extends BaseModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }
