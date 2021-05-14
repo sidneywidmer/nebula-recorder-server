@@ -48,4 +48,12 @@ public class User extends BaseModel {
     public void setActivationCode(String activationCode) {
         this.activationCode = activationCode;
     }
+
+    public Instant getWhenActivated() {
+        return whenActivated;
+    }
+
+    public void setWhenActivated(Instant whenActivated) {
+        this.whenActivated = whenActivated;
+    }
 }
