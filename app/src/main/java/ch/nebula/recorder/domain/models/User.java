@@ -5,6 +5,7 @@ import io.ebean.annotation.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.Instant;
 
 @Entity
 @Table(name = "users")
@@ -14,6 +15,8 @@ public class User extends BaseModel {
 
     @NotNull
     String password;
+
+    Instant whenActivated;
 
     String activationCode;
 
