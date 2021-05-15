@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:3.15.0'
     implementation 'org.mindrot:jbcrypt:0.4'
     implementation 'net.sargue:mailgun:1.10.0'
+    implementation 'com.sun.activation:javax.activation:1.2.0'
 
     // query bean generation
     annotationProcessor 'io.ebean:querybean-generator:12.8.0'
