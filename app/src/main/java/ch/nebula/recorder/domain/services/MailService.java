@@ -14,7 +14,7 @@ public class MailService {
 
     public void send() {
         Mail.using(configuration)
-                .to("oliverisler@icloud.com")
+                .to("oliverisler93@gmail.com")
                 .subject("Activation code")
                 .text("A-123456789")
                 .build()
