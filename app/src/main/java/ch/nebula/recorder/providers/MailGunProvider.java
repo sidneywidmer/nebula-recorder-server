@@ -6,13 +6,13 @@ import javax.inject.Provider;
 
 public class MailGunProvider implements Provider<Configuration> {
     /**
-     * Create new MailGun Configuration.
+     * Create new MailGun Configuration to send mails.
      */
     @Override
     public Configuration get() {
         return new Configuration()
                 .domain("***REMOVED***")
                 .apiKey("***REMOVED***")
-                .from("***REMOVED***");
+                .from("Test account", "postmaster@***REMOVED***");
     }
 }
