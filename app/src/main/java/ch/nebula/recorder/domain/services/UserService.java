@@ -28,7 +28,9 @@ public class UserService {
      */
     public User create(UserSignupRequest signup) throws SystemException, ApiException {
         var existing = new QUser().email.equalTo(signup.getEmail()).findOneOrEmpty();
-        if (existing.isPresent()) throw new InvalidDataException(Map.of("_", "User already exists"));
+        if (existing.isPresent()) {
+            throw new InvalidDataException(Map.of("_", "User already exists"));
+        }
 
         var newUser = new User(signup.getEmail(), this.hashPassword(signup.getPassword()));
         newUser.save();
@@ -37,14 +39,26 @@ public class UserService {
     }
 
     public Optional<User> byEmailAndPassword(LoginRequest login) {
-        return new QUser().email.equalTo(login.getEmail()).findOneOrEmpty();
+        var user = new QUser()
+                .email.equalTo(login.getEmail())
+                .findOneOrEmpty();
+
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (!hasher.check(login.getPassword(), user.get().getPassword())) {
+            return Optional.empty();
+        }
+
+        return user;
     }
 
     private String hashPassword(String password) throws SystemException {
-        String hashedPw = null;
+        String hashedPw;
 
         try {
-            hashedPw = this.hasher.make(password);
+            hashedPw = hasher.make(password);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new SystemException(e);
         }

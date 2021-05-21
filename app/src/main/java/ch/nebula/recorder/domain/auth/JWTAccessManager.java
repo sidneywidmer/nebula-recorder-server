@@ -1,5 +1,7 @@
 package ch.nebula.recorder.domain.auth;
 
+import ch.nebula.recorder.core.exceptions.PermissionDeniedException;
+import ch.nebula.recorder.domain.models.query.QUser;
 import ch.nebula.recorder.domain.services.AuthService;
 import io.javalin.core.security.AccessManager;
 import io.javalin.core.security.Role;
@@ -15,7 +17,6 @@ import static ch.nebula.recorder.domain.auth.AuthRoles.ANYONE;
 
 public class JWTAccessManager implements AccessManager {
     private final AuthService auth;
-    private final static String JWT_ATTR = "jwt-token";
 
 
     @Inject
@@ -26,14 +27,14 @@ public class JWTAccessManager implements AccessManager {
     @Override
     public void manage(@NotNull Handler handler, @NotNull Context ctx, @NotNull Set<Role> permittedRoles)
             throws Exception {
-        // No specific roles given, we assume the route is public
-        if (permittedRoles.isEmpty() || permittedRoles.contains(ANYONE)) {
-            handler.handle(ctx);
-        } else {
+        if (!permittedRoles.isEmpty() && !permittedRoles.contains(ANYONE)) {
             var token = this.auth.getJWTFromHeader(ctx.header("Authorization"));
-            ctx.attribute(JWT_ATTR, token);
+            var user = new QUser().id.equalTo(token.getClaim("user").asInt()).findOne();
+            if (user == null) {
+                throw new PermissionDeniedException();
+            }
+            ctx.attribute("user", user);
         }
-
         handler.handle(ctx);
     }
 
