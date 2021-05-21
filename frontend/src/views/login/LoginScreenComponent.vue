@@ -4,6 +4,9 @@
       <div class="col col-md-6 offset-md-3">
         <form @submit="login">
           <h2>Anmelden</h2>
+          <div v-if="issetError" class="alert alert-warning">
+            Bitte geben Sie eine gültige E-Mail und ein gültiges Passwort ein.
+          </div>
           <input
             v-model="user.email"
             placeholder="Benutzername"
@@ -39,20 +42,23 @@ export default {
       user: {
         email: null,
         password: null
-      }
+      },
+      issetError: false
     };
   },
   methods: {
     login: function(e) {
       e.preventDefault();
-      localStorage.setItem("token","test");
-      this.$router.push('/')
-      /*let email = this.user.email;
+      /*localStorage.setItem("token","test");
+      this.$router.push('/')*/
+      let email = this.user.email;
       let password = this.user.password;
       this.$store
         .dispatch("login", { email, password })
         .then(() => this.$router.push("/"))
-        .catch(err => console.log(err));*/
+        .catch(
+            this.issetError = true
+        );
     }
   }
 };

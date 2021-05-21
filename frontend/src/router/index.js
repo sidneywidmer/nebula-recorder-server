@@ -5,6 +5,7 @@ import LoginScreenComponent from "@/views/login/LoginScreenComponent";
 import RegisterScreenComponent from "@/views/register/RegisterScreenComponent";
 import Account from "@/views/account/Account";
 import ManageRecordings from "@/views/account/ManageRecordings";
+import AfterRegisterView from "@/views/register/AfterRegisterView";
 
 Vue.use(VueRouter);
 
@@ -32,6 +33,11 @@ const routes = [
     path: "/register",
     name: "register",
     component: RegisterScreenComponent
+  },
+  {
+    path: "/register/after",
+    name: "after Register",
+    component: AfterRegisterView
   },
   {
     path: "/account",
