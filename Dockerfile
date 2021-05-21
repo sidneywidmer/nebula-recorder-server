@@ -1,6 +1,14 @@
+FROM node:16 as frontend
+
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
+RUN cd frontend && npm install && npm run build
+RUN rm -rf /app/frontend  # remove node modules to save some space
+
 FROM gradle:jdk16 as builder
 
-COPY --chown=gradle:gradle . /home/gradle/src
+COPY --from=frontend --chown=gradle:gradle /app /home/gradle/src
 COPY app/src/main/resources/app.prod.conf /home/gradle/src/app/src/main/resources/app.conf
 WORKDIR /home/gradle/src
 RUN gradle build && gradle fatJar
