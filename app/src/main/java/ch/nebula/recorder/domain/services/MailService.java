@@ -1,16 +1,20 @@
 package ch.nebula.recorder.domain.services;
 
+import ch.nebula.recorder.core.Generator;
 import ch.nebula.recorder.domain.models.User;
 import com.google.inject.Inject;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
 
 public class MailService {
+
     private final Configuration configuration;
+    private final Generator generator;
 
     @Inject
-    public MailService(Configuration configuration) {
+    public MailService(Configuration configuration, Generator generator) {
         this.configuration = configuration;
+        this.generator = generator;
     }
 
     /**
@@ -20,7 +24,7 @@ public class MailService {
         Mail.using(configuration)
                 .to("oliverisler93@gmail.com") // TODO: replace hard coded email with user.getEmail()
                 .subject("Activation code")
-                .text("A-123456789")
+                .text("Activation Code: " + generator.generateActivationCode())
                 .build()
                 .send();
     }
