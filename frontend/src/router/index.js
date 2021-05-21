@@ -1,8 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import SingleBook from "../views/SingleBook";
-import ReadBook from "@/views/ReadBook";
 import LoginScreenComponent from "@/views/login/LoginScreenComponent";
 import RegisterScreenComponent from "@/views/register/RegisterScreenComponent";
 import Account from "@/views/account/Account";
@@ -24,16 +22,6 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue")
-  },
-  {
-    path: "/book/:id",
-    name: "bookDetail",
-    component: SingleBook
-  },
-  {
-    path :"/book/read/:id",
-    name: "bookRead",
-    component: ReadBook
   },
   {
     path: "/login",
