@@ -27,6 +27,7 @@ public class JavalinProvider implements Provider<Javalin> {
             cfg.addStaticFiles("public");
             cfg.enforceSsl = config.getBoolean("server.force-ssl");
             cfg.accessManager(accessManager);
+            cfg.enableCorsForAllOrigins();
         });
     }
 }
