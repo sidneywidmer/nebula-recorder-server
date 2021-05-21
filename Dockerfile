@@ -1,4 +1,4 @@
-FROM node:16-buster as frontend
+FROM node:12 as frontend
 
 RUN mkdir /app
 WORKDIR /app
