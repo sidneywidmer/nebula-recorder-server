@@ -38,12 +38,6 @@
         Für dich persönlich
       </h2>
       <br/>
-      <!--
-      <div class="row">
-        <div v-for="block in content.body" :key="block._uid" class="col col-md-4">
-          <BookCover :is="block.component" :block="block"></BookCover>
-        </div>
-      </div>-->
     </div>
   </div>
 </template>
