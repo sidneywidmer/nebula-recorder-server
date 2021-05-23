@@ -2,7 +2,6 @@ package ch.nebula.recorder.providers;
 
 import com.auth0.jwt.JWTVerifier;
 import com.google.inject.AbstractModule;
-import com.mitchellbosecke.pebble.PebbleEngine;
 import com.typesafe.config.Config;
 import io.ebean.Database;
 import io.javalin.Javalin;

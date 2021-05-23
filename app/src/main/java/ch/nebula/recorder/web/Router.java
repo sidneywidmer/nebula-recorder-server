@@ -1,7 +1,6 @@
 package ch.nebula.recorder.web;
 
 import ch.nebula.recorder.core.Component;
-import ch.nebula.recorder.domain.auth.AuthRoles;
 import io.javalin.Javalin;
 import ch.nebula.recorder.web.controllers.AuthController;
 import ch.nebula.recorder.web.controllers.UserController;
