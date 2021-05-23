@@ -5,6 +5,7 @@ import io.ebean.annotation.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Entity
@@ -18,6 +19,7 @@ public class User extends BaseModel {
 
     Instant whenActivated;
 
+    @Size(min = 10, max = 10)
     String activationCode;
 
     public User(String email, String password) {
