@@ -20,7 +20,7 @@ public class Generator {
         StringBuilder stringBuilder = new StringBuilder(MAX_LENGTH);
 
         for (int i = 0; i < MAX_LENGTH; i++) {
-            stringBuilder.append(ALLOWED_CHARS.charAt(random.nextInt(ALLOWED_CHARS.length() + 1)));
+            stringBuilder.append(ALLOWED_CHARS.charAt(random.nextInt(ALLOWED_CHARS.length())));
         }
 
         return stringBuilder.toString();
