@@ -4,7 +4,6 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 public class Generator {
-
     public static final int MAX_LENGTH = 10;
     public static final String ALLOWED_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "0123456789";
     private final Random random;

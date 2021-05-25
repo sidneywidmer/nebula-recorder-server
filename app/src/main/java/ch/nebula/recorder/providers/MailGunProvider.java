@@ -10,6 +10,7 @@ public class MailGunProvider implements Provider<Configuration> {
      */
     @Override
     public Configuration get() {
+        //move into app.conf
         return new Configuration()
                 .domain("sandbox1791bc77d949423db055ad0edc7cb05c.mailgun.org")
                 .apiKey("c02890d811029c24498c5eb9f38391c5-2a9a428a-ac8a9c43")
