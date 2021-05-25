@@ -10,6 +10,7 @@ public class MailGunProvider implements Provider<Configuration> {
      */
     @Override
     public Configuration get() {
+        //move into app.conf
         return new Configuration()
                 .domain("***REMOVED***")
                 .apiKey("***REMOVED***")

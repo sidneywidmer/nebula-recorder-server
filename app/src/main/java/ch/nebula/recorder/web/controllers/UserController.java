@@ -33,13 +33,16 @@ public class UserController extends BaseController {
         var userSignup = (UserSignupRequest) this.validate(ctx, UserSignupRequest.class);
         User user = this.userService.create(userSignup);
 
+        //move into user.create
         String activationCode = this.mailService.generateActivationCode();
 
+        // move error handling into mailservice
         Response response = this.mailService.sendActivationMail(user, activationCode);
         if (!response.isOk()) {
             throw new InvalidDataException(Map.of("_", "Activation mail not sent"));
         }
 
+        //remove because its not longer neceseeary
         user.setActivationCode(activationCode); //TODO: ask sidney, hash activationCode?
         user.update();
 

@@ -10,8 +10,7 @@ import net.sargue.mailgun.Response;
 import java.util.Base64;
 
 public class MailService {
-
-    private final Configuration configuration;
+    private final Configuration configuration; //dont name it config
     private final Generator generator;
 
     @Inject
@@ -21,15 +20,22 @@ public class MailService {
     }
 
     /**
-     * Try to send an activation mail to the new user
+     * Try to send an activation mail to the new user. // Kommentar machen der Beschreibt WIESO und nicht was
+     * ...After creating a new user it has an activation code
      */
     public Response sendActivationMail(User user, String activationCode) {
+        //encode only email and activationCode and not the whole query string
         String queryString = String.format("?email=%s&activationCode=%s", user.getEmail(), activationCode);
-        String link = "https://nebula.sidney.dev/#/activate" + encode(queryString); // TODO: ask sidney, encode only values or whole query string?
 
+        //move url into app.conf with env variable
+        String link = "https://nebula.sidney.dev/#/activate" + encode(queryString);
+
+        //Template engine in /resources activationMail.html
+        //TemplateEngine.render.activationMail.html(using)
+        // watch out https://www.mailgun.com/ or https://github.com/mailgun/transactional-email-templates/blob/master/templates/inlined/action.html or 
         return Mail.using(configuration)
                 .body()
-                .link(link, "click here to activate")
+                .link(link)
                 .mail()
                 .to("oliverisler93@gmail.com") // TODO: replace string with user.getEmail()
                 .subject("Activation code")
@@ -38,7 +44,7 @@ public class MailService {
     }
 
     /**
-     * Generates an activation code for the new user
+     * Generates an activation code for the new user.
      */
     public String generateActivationCode() {
         return generator.generateActivationCode();
