@@ -1,1 +1,11 @@
-Hello {{ user.getEmail() }}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>User activation</title>
+    </head>
+    <body>
+        <h1>Welcome {# @pebvariable name="email" type="String" #}{{ email }}</h1>
+        <p>Please click on the link below to <i>activate</i> <b>your user</b> on nebula recorder.</p>
+        <a href="{# @pebvariable name="link" type="String" #}{{ url }}"></a>
+    </body>
+</html>
