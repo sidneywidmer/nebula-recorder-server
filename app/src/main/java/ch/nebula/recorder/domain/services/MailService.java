@@ -4,6 +4,7 @@ import ch.nebula.recorder.core.TemplateEngine;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.domain.models.User;
 import com.google.inject.Inject;
+import com.typesafe.config.Config;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
 import net.sargue.mailgun.Response;
@@ -17,11 +18,13 @@ public class MailService {
 
     private final Configuration mailGunConfig;
     private final TemplateEngine engine;
+    private final Config config;
 
     @Inject
-    public MailService(Configuration mailGunConfig, TemplateEngine engine) {
+    public MailService(Configuration mailGunConfig, TemplateEngine engine, Config config) {
         this.mailGunConfig = mailGunConfig;
         this.engine = engine;
+        this.config = config;
     }
 
     /**
@@ -30,20 +33,15 @@ public class MailService {
      */
     public void sendActivationMail(User user) throws InvalidDataException {
         String queryString = generateQueryString(user.getEmail(), user.getActivationCode());
-
-        //move url into app.conf with env variable
-        String link = "https://nebula.sidney.dev/#/activate" + encode(queryString); // TODO: ask sidney, encode only values or whole query string?
+        String link = config.getString("mail.url") + encode(queryString);
 
         var body = engine.render("mails/userActivation.peb", model("user", user));
 
-        //Template engine in /resources activationMail.html
-        //TemplateEngine.render.activationMail.html(using)
-        // watch out https://www.mailgun.com/ or https://github.com/mailgun/transactional-email-templates/blob/master/templates/inlined/action.html or
         Response response = Mail.using(mailGunConfig)
                 .body()
-                .link(link, "click here to activate")
+                .link(link)
                 .mail()
-                .to("oliverisler93@gmail.com") // TODO: replace string with user.getEmail()
+                .to(user.getEmail())
                 .subject("Activation code")
                 .build()
                 .send();
