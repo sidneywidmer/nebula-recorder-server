@@ -10,9 +10,8 @@ import net.sargue.mailgun.Mail;
 import net.sargue.mailgun.Response;
 
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
-
-import static io.javalin.plugin.rendering.template.TemplateUtil.model;
 
 public class MailService {
 
@@ -35,14 +34,17 @@ public class MailService {
         String queryString = generateQueryString(user.getEmail(), user.getActivationCode());
         String link = config.getString("mail.url") + queryString;
 
-        var body = engine.render("mails/userActivation.peb", model("user", user));
+//        var body = engine.render("mails/userActivation.peb", model("user", user, "link", link));
+
+        Map<String, Object> context = new HashMap<>();
+        context.put("email", user.getEmail());
+        context.put("url", link);
+        var body = engine.render("mails/userActivation.peb", context);
 
         Response response = Mail.using(mailGunConfig)
-                .body()
-                .link(link)
-                .mail()
                 .to(user.getEmail())
                 .subject("Activation code")
+                .content(body)
                 .build()
                 .send();
 
