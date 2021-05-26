@@ -4,7 +4,6 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 public class Generator {
-
     public static final int MAX_LENGTH = 10;
     public static final String ALLOWED_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "0123456789";
     private final Random random;
@@ -14,7 +13,7 @@ public class Generator {
     }
 
     /**
-     * Create a random activation Code as a String
+     * Creates a random activation code as a String which is needed in the users activation process.
      */
     public String generateActivationCode() {
         StringBuilder stringBuilder = new StringBuilder(MAX_LENGTH);

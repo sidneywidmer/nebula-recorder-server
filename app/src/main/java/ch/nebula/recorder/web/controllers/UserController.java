@@ -1,7 +1,6 @@
 package ch.nebula.recorder.web.controllers;
 
 import ch.nebula.recorder.core.exceptions.ApiException;
-import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.core.exceptions.SystemException;
 import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.requests.UserActivateRequest;
@@ -9,12 +8,10 @@ import ch.nebula.recorder.domain.requests.UserSignupRequest;
 import ch.nebula.recorder.domain.services.MailService;
 import ch.nebula.recorder.domain.services.UserService;
 import io.javalin.http.Context;
-import net.sargue.mailgun.Response;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.Validator;
-import java.util.Map;
 
 
 @Singleton
@@ -32,19 +29,7 @@ public class UserController extends BaseController {
     public void signup(Context ctx) throws ApiException, SystemException {
         var userSignup = (UserSignupRequest) this.validate(ctx, UserSignupRequest.class);
         User user = this.userService.create(userSignup);
-
-        //move into user.create
-        String activationCode = this.mailService.generateActivationCode();
-
-        // move error handling into mailservice
-        Response response = this.mailService.sendActivationMail(user, activationCode);
-        if (!response.isOk()) {
-            throw new InvalidDataException(Map.of("_", "Activation mail not sent"));
-        }
-
-        //remove because its not longer neceseeary
-        user.setActivationCode(activationCode); //TODO: ask sidney, hash activationCode?
-        user.update();
+        this.mailService.sendActivationMail(user);
 
         ctx.status(200);
     }
