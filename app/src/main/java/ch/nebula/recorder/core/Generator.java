@@ -13,7 +13,7 @@ public class Generator {
     }
 
     /**
-     * Create a random activation Code as a String
+     * Creates a random activation Code as a String which must be verified in the activation process.
      */
     public String generateActivationCode() {
         StringBuilder stringBuilder = new StringBuilder(MAX_LENGTH);
