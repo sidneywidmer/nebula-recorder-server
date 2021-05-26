@@ -1,19 +1,27 @@
 package ch.nebula.recorder.providers;
 
+import com.typesafe.config.Config;
 import net.sargue.mailgun.Configuration;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 public class MailGunProvider implements Provider<Configuration> {
+    private final Config config;
+
+    @Inject
+    public MailGunProvider(Config config) {
+        this.config = config;
+    }
+
     /**
      * Create new MailGun Configuration to send mails.
      */
     @Override
     public Configuration get() {
-        //move into app.conf
         return new Configuration()
-                .domain("sandbox1791bc77d949423db055ad0edc7cb05c.mailgun.org")
-                .apiKey("c02890d811029c24498c5eb9f38391c5-2a9a428a-ac8a9c43")
-                .from("Test account", "postmaster@sandbox1791bc77d949423db055ad0edc7cb05c.mailgun.org");
+                .domain(config.getString("mail.domain"))
+                .apiKey(config.getString("mail.api-key"))
+                .from("Test account", config.getString("mail.address"));
     }
 }
