@@ -1,6 +1,7 @@
 package ch.nebula.recorder.core;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -10,12 +11,10 @@ public class Hasher {
      * Create a salted bcrypt hash of given password string
      */
     public String make(String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        return BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
     public boolean check(String password, String hash) {
-        var result = BCrypt.verifyer().verify(password.toCharArray(), hash);
-
-        return result.verified;
+        return BCrypt.checkpw(password, hash);
     }
 }

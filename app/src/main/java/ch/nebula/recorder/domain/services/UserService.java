@@ -44,10 +44,6 @@ public class UserService {
      * Update whenActivated on user if activationCode is correct.
      */
     public void activate(UserActivateRequest activate) throws SystemException, ApiException {
-        //query anpassen, so dass der user nur aktiviert wird, wenn er auch noch nicht aktiviert war
-        //email.equalTo
-        //activateWhenIsNUll
-        //findOneOrEmpty
         Optional<User> optionalUser = new QUser().email.equalTo(activate.getEmail()).findOneOrEmpty();
         if (optionalUser.isEmpty()) {
             throw new InvalidDataException(Map.of("_", "User doesnt exist"));

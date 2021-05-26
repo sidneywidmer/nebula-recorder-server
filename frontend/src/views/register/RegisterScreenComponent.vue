@@ -4,8 +4,9 @@
       <div class="col col-md-6 offset-md-3">
         <form @submit="register">
           <h2>Registrieren</h2>
-          <input v-model="user.firstname" placeholder="Vorname (optional)" type="text" name="firstname" class="input"/>
-          <input v-model="user.lastname" placeholder="Nachname (optional)" type="text" name="lastname" class="input"/>
+          <div v-if="issetError" class="alert alert-warning">
+            Bitte geben Sie eine gültige E-Mail und ein gültiges Passwort ein.
+          </div>
           <input v-model="user.email" placeholder="E-Mail" name="email" type="email" class="input"/>
           <input v-model="user.password" placeholder="Passwort" name="password" type="password" class="input"/>
           <br/>
@@ -22,26 +23,30 @@
 </template>
 
 <script>
-//import Vue from "vue";
-import axios from "axios";
-//import VueAxios from "vue-axios";
 
 export default {
-  name: "LoginScreenComponent",
+  name: "RegisterScreenComponent",
   data() {
     return {
       user: {
-        firstname:null,
-        lastname:null,
-        email:null,
-        password:null
-      }
+        email: null,
+        password: null
+      },
+      issetError:false
     }
   },
   methods: {
-    register(e) {
+    register: function (e) {
       e.preventDefault();
-      axios.post('http://localhost:5000/v1/account/register', this.user);
+      this.issetError = false;
+      let email = this.user.email;
+      let password = this.user.password;
+      this.$store
+          .dispatch("register", {email, password})
+          .then(() => this.$router.push("/register/after"))
+          .catch(
+              this.issetError = true
+          );
     }
   }
 }
