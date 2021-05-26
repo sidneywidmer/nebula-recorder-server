@@ -1,6 +1,5 @@
 package ch.nebula.recorder.domain.services;
 
-import ch.nebula.recorder.core.Generator;
 import ch.nebula.recorder.core.Hasher;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
@@ -20,17 +19,14 @@ import java.util.Optional;
 
 public class UserService {
     private final Hasher hasher;
-    private final Generator generator;
 
     @Inject
-    public UserService(Hasher hasher, Generator generator) {
+    public UserService(Hasher hasher) {
         this.hasher = hasher;
-        this.generator = generator;
     }
 
     /**
      * Try to create a new user by also validating if the given email is unique.
-     * If the user is created an activationCode will be generated.
      */
     public User create(UserSignupRequest signup) throws SystemException, ApiException {
         var existing = new QUser().email.equalTo(signup.getEmail()).findOneOrEmpty();
@@ -39,25 +35,25 @@ public class UserService {
         }
 
         var newUser = new User(signup.getEmail(), this.hashPassword(signup.getPassword()));
-
-        String activationCode = generator.generateActivationCode();
-        newUser.setActivationCode(activationCode);
         newUser.save();
 
         return newUser;
     }
 
     /**
-     * Try to activate a user by also validating if the given user is not yet activated and the activationCode is valid.
+     * Update whenActivated on user if activationCode is correct.
      */
     public void activate(UserActivateRequest activate) throws SystemException, ApiException {
-        User user = new QUser().email.equalTo(activate.getEmail()).findOne();
-        if (user == null) {
+        //query anpassen, so dass der user nur aktiviert wird, wenn er auch noch nicht aktiviert war
+        //email.equalTo
+        //activateWhenIsNUll
+        //findOneOrEmpty
+        Optional<User> optionalUser = new QUser().email.equalTo(activate.getEmail()).findOneOrEmpty();
+        if (optionalUser.isEmpty()) {
             throw new InvalidDataException(Map.of("_", "User doesnt exist"));
         }
-        if (user.getWhenActivated() != null) {
-            throw new InvalidDataException(Map.of("-", "User already activated"));
-        }
+
+        User user = optionalUser.get();
         if (!user.getActivationCode().equals(activate.getActivationCode())) {
             throw new InvalidDataException(Map.of("_", "Wrong activation code"));
         }
