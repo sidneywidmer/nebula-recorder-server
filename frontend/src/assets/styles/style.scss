@@ -10,3 +10,15 @@
 .pull-right {
   float: right;
 }
+
+.alert {
+  width: 100%;
+  min-height: 40px;
+  padding: 15px;
+  border-radius: 3px;
+
+  &.alert-warning {
+    background: #ffdcdc;
+    color: #c46767;
+  }
+}

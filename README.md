@@ -68,3 +68,7 @@ As an ORM we're using ebean including the ebean-migrations. Models are located i
 If you create new models or change existing ones you need to trigger `gradle makeMigrations` - you can find the resulting migrations in `resources/dbmigrations` . Open migrations are automatically applied on server startup.
 
 You can find more information in the project documentation: https://ebean.io/
+
+### Authentication
+
+We implement the Javalin `AccessManager` as `JWTAccessManager`. If a route is defined like this `path("api/auth/check", () -> get(authController::check, roles(AUTHENTICATED)));` (notice the `roles`) the AccessManager tries to get a JWT token from the `Authentication` header and validate it. The token contains a `user` claim in form of the users id and we check if said user is still active. In the controller you then have access to the User object `User user = ctx.attribute("user");` since it gets set as attribute on the Javalin context. If anything fails along the way (e.g getting the token, validating the token, getting the user, e.t.c) a `PermissionDeniedException` is raised.
