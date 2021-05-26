@@ -33,7 +33,7 @@ public class MailService {
      */
     public void sendActivationMail(User user) throws InvalidDataException {
         String queryString = generateQueryString(user.getEmail(), user.getActivationCode());
-        String link = config.getString("mail.url") + encode(queryString);
+        String link = config.getString("mail.url") + queryString;
 
         var body = engine.render("mails/userActivation.peb", model("user", user));
 
