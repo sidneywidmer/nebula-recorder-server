@@ -22,6 +22,7 @@ public class MailGunProvider implements Provider<Configuration> {
         return new Configuration()
                 .domain(config.getString("mail.domain"))
                 .apiKey(config.getString("mail.api-key"))
+                .apiUrl("https://api.eu.mailgun.net/v3")
                 .from(config.getString("mail.address"));
     }
 }
