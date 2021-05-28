@@ -16,7 +16,7 @@ public class Generator {
      * Creates a random activation code as a String which is needed in the users activation process.
      */
     public String generateActivationCode() {
-        StringBuilder stringBuilder = new StringBuilder(MAX_LENGTH);
+        var stringBuilder = new StringBuilder(MAX_LENGTH);
 
         for (int i = 0; i < MAX_LENGTH; i++) {
             stringBuilder.append(ALLOWED_CHARS.charAt(random.nextInt(ALLOWED_CHARS.length())));
