@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <alterColumn columnName="activation_code" tableName="users" type="varchar(10)" currentType="varchar" currentNotnull="false"/>
+    </changeSet>
+</migration>
