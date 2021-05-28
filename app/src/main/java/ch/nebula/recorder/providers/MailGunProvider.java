@@ -22,6 +22,6 @@ public class MailGunProvider implements Provider<Configuration> {
         return new Configuration()
                 .domain(config.getString("mail.domain"))
                 .apiKey(config.getString("mail.api-key"))
-                .from("Test account", config.getString("mail.address"));
+                .from(config.getString("mail.address"));
     }
 }

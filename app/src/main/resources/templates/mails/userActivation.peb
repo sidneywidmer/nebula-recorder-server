@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>User activation</title>
+        <title>Nebula user activation</title>
     </head>
     <body>
-        <h1>Welcome {{ email }}</h1>
-        <p>Activate your <b>Nebula</b> account and share your recordings. So that nothing is forgotten, we store everything for you in the cloud<p>.
-        <p>So simple, you almost don't have to worry about anything.</p>
-        <a href="{{ url }}"></a>
+        <h1>Welcome {{ user.getEmail }}</h1>
+        <p>Activate your <b>Nebula</b> account, share your recordings and store everything in the cloud.<p>
+        <p>{{ link }}></p>
     </body>
 </html>

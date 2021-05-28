@@ -2,7 +2,6 @@ package ch.nebula.recorder.web.controllers;
 
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.SystemException;
-import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.requests.UserActivateRequest;
 import ch.nebula.recorder.domain.requests.UserSignupRequest;
 import ch.nebula.recorder.domain.services.MailService;
@@ -28,14 +27,14 @@ public class UserController extends BaseController {
 
     public void signup(Context ctx) throws ApiException, SystemException {
         var userSignup = (UserSignupRequest) this.validate(ctx, UserSignupRequest.class);
-        User user = this.userService.create(userSignup);
+        var user = this.userService.create(userSignup);
         this.mailService.sendActivationMail(user);
 
         ctx.status(200);
     }
 
     public void activate(Context ctx) throws ApiException, SystemException {
-        UserActivateRequest userActivation = this.validate(ctx, UserActivateRequest.class);
+        var userActivation = this.validate(ctx, UserActivateRequest.class);
         this.userService.activate(userActivation);
 
         ctx.status(200);

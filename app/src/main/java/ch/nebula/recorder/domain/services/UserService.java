@@ -40,7 +40,7 @@ public class UserService {
 
         var newUser = new User(signup.getEmail(), this.hashPassword(signup.getPassword()));
 
-        String activationCode = generator.generateActivationCode();
+        var activationCode = generator.generateActivationCode();
         newUser.setActivationCode(activationCode);
         newUser.save();
 
@@ -51,7 +51,7 @@ public class UserService {
      * Try to activate a user by also validating if the given user is not yet activated and the activationCode is valid.
      */
     public void activate(UserActivateRequest activate) throws SystemException, ApiException {
-        User user = new QUser().email.equalTo(activate.getEmail()).findOne();
+        var user = new QUser().email.equalTo(activate.getEmail()).findOne();
         if (user == null) {
             throw new InvalidDataException(Map.of("_", "User doesnt exist"));
         }

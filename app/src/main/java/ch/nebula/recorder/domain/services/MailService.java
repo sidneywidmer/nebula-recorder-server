@@ -7,10 +7,9 @@ import com.google.inject.Inject;
 import com.typesafe.config.Config;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
-import net.sargue.mailgun.Response;
+import net.sargue.mailgun.content.Body;
 
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MailService {
@@ -31,20 +30,14 @@ public class MailService {
      * by clicking on a link which is sent to the users email.
      */
     public void sendActivationMail(User user) throws InvalidDataException {
-        String queryString = generateQueryString(user.getEmail(), user.getActivationCode());
-        String link = config.getString("mail.url") + queryString;
+        var queryString = generateQueryString(user.getEmail(), user.getActivationCode());
+        var link = config.getString("mail.url") + queryString;
 
-//        var body = engine.render("mails/userActivation.peb", model("user", user, "link", link));
-
-        Map<String, Object> context = new HashMap<>();
-        context.put("email", user.getEmail());
-        context.put("url", link);
-        var body = engine.render("mails/userActivation.peb", context);
-
-        Response response = Mail.using(mailGunConfig)
+        var body = engine.render("mails/userActivation.peb", io.javalin.plugin.rendering.template.TemplateUtil.model("user", user, "link", link));
+        var response = Mail.using(mailGunConfig)
                 .to(user.getEmail())
                 .subject("Activation code")
-                .content(body)
+                .content(new Body(body, body))
                 .build()
                 .send();
 
