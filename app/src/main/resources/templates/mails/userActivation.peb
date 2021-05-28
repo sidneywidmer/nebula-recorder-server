@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Nebula user activation</title>
-    </head>
-    <body>
-        <h1>Welcome {{ user.getEmail }}</h1>
-        <p>Activate your <b>Nebula</b> account, share your recordings and store everything in the cloud.<p>
-        <p>{{ link }}></p>
+  <head>
+    <meta charset="utf-8">
+    <title>Nebula account activation</title>
+  </head>
+  <body>
+    <h1>Welcome {{ user.getEmail }}</h1>
+    <h2>Thank you for using <b>nebula recorder</b>.</h2>
+    <p>To activate your <b>nebula account</b> we just need to verify your email address:<br>{{ user.getEmail }}.</p>
+    <p>Please click the link below to start sharing your recordings and store everything in the cloud.<br>{{ link }}</p>
+    <p>You’re receiving this email because you recently created a new Nebula account. If this wasn’t you, please ignore this email.</p>
     </body>
 </html>

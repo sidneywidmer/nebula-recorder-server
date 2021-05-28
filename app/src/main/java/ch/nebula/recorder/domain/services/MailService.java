@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 import com.typesafe.config.Config;
 import net.sargue.mailgun.Configuration;
 import net.sargue.mailgun.Mail;
-import net.sargue.mailgun.content.Body;
 
 import java.util.Base64;
 import java.util.Map;
@@ -30,14 +29,13 @@ public class MailService {
      * by clicking on a link which is sent to the users email.
      */
     public void sendActivationMail(User user) throws InvalidDataException {
-        var queryString = generateQueryString(user.getEmail(), user.getActivationCode());
-        var link = config.getString("mail.url") + queryString;
-
+        var link = config.getString("mail.url") + generateQueryString(user.getEmail(), user.getActivationCode());
         var body = engine.render("mails/userActivation.peb", io.javalin.plugin.rendering.template.TemplateUtil.model("user", user, "link", link));
         var response = Mail.using(mailGunConfig)
                 .to(user.getEmail())
-                .subject("Activation code")
-                .content(new Body(body, body))
+                .subject("Nebula account registration")
+                .text(body)
+                .html(body)
                 .build()
                 .send();
 
