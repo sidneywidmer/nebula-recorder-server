@@ -4,8 +4,9 @@
         <title>User activation</title>
     </head>
     <body>
-        <h1>Welcome {# @pebvariable name="email" type="String" #}{{ email }}</h1>
-        <p>Please click on the link below to <i>activate</i> <b>your user</b> on nebula recorder.</p>
-        <a href="{# @pebvariable name="link" type="String" #}{{ url }}"></a>
+        <h1>Welcome {{ email }}</h1>
+        <p>Activate your <b>Nebula</b> account and share your recordings. So that nothing is forgotten, we store everything for you in the cloud<p>.
+        <p>So simple, you almost don't have to worry about anything.</p>
+        <a href="{{ url }}"></a>
     </body>
 </html>
