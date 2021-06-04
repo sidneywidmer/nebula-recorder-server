@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <alterColumn columnName="name" tableName="recordings" type="varchar(30)" currentType="varchar" currentNotnull="true"/>
+        <addColumn tableName="recordings">
+            <column name="recording_type" type="integer" notnull="true" checkConstraint="check ( recording_type in (0,1,2))" checkConstraintName="ck_recordings_recording_type"/>
+            <column name="tag" type="varchar(30)"/>
+            <column name="description" type="varchar(50)"/>
+        </addColumn>
+    </changeSet>
+</migration>

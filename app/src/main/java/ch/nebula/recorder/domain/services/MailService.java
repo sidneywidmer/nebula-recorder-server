@@ -27,6 +27,7 @@ public class MailService {
     /**
      * After creating a new user it has an activation code. This code must be verified in the activation process
      * by clicking on a link which is sent to the users email.
+     * @param user
      */
     public void sendActivationMail(User user) throws InvalidDataException {
         var link = config.getString("mail.url") + generateQueryString(user.getEmail(), user.getActivationCode());
