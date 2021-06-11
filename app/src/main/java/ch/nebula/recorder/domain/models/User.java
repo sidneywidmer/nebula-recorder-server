@@ -25,8 +25,7 @@ public class User extends BaseModel {
     @Size(min = 10, max = 10)
     String activationCode;
 
-    //TODO: ask Sidney if orphan removal should be true
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     Set<Recording> recordings;
 
     public User(String email, String password) {

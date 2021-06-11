@@ -2,7 +2,7 @@ package ch.nebula.recorder.domain.services;
 
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.domain.models.Recording;
-import ch.nebula.recorder.domain.models.query.QUser;
+import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 
 import java.util.Map;
@@ -11,16 +11,20 @@ public class RecordingService {
 
     /**
      * After a user finished a recording on the client it can be uploaded to the server.
-     *
-     * @param recordingUploadRequest
      */
-    public void upload(RecordingUploadRequest recordingUploadRequest) throws InvalidDataException {
-        var user = new QUser().email.equalTo(recordingUploadRequest.getEmail()).findOne();
+    public void upload(User user, RecordingUploadRequest recordingUploadRequest) throws InvalidDataException {
         if (user == null) {
-            throw new InvalidDataException(Map.of("_", "User doesnt exist"));
+            throw new InvalidDataException(Map.of("-", "Illegal State"));
         }
 
-        var recording = new Recording(recordingUploadRequest.getName(), recordingUploadRequest.getType(), recordingUploadRequest.getRecording(), user);
+        String name = user.getId() + "-" + recordingUploadRequest.getName();
+        var recording = new Recording(name, recordingUploadRequest.getType(), user);
+
+        String description = recordingUploadRequest.getDescription();
+        if (description != null && !"".equals(description)) {
+            recording.setDescription(description);
+        }
+
         recording.save();
     }
 }

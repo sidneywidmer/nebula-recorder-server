@@ -35,7 +35,7 @@ public class Router implements Component {
             path("api/user/activate", () -> post(userController::activate));
             path("api/auth/login", () -> post(authController::login));
             path("api/auth/check", () -> get(authController::check, roles(AUTHENTICATED)));
-            path("api/recording/upload", () -> post(recordingController::upload));
+            path("api/recording/upload", () -> post(recordingController::upload, roles(AUTHENTICATED)));
         });
     }
 }

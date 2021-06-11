@@ -19,7 +19,7 @@ public class RecordingController extends BaseController {
 
     public void upload(Context ctx) throws ApiException {
         var recordingUploadRequest = this.validate(ctx, RecordingUploadRequest.class);
-        recordingService.upload(recordingUploadRequest);
+        recordingService.upload(ctx.attribute("user"), recordingUploadRequest);
 
         ctx.status(200);
     }
