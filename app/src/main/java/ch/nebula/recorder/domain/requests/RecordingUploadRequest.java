@@ -3,6 +3,7 @@ package ch.nebula.recorder.domain.requests;
 import ch.nebula.recorder.core.RecordingType;
 import io.ebean.annotation.NotNull;
 
+import javax.persistence.Lob;
 import javax.validation.constraints.Size;
 
 public class RecordingUploadRequest {
@@ -17,7 +18,8 @@ public class RecordingUploadRequest {
     String description;
 
     @NotNull
-    String recording;
+    @Lob
+    byte[] recording;
 
     public String getName() {
         return name;
@@ -43,11 +45,11 @@ public class RecordingUploadRequest {
         this.description = description;
     }
 
-    public String getRecording() {
+    public byte[] getRecording() {
         return recording;
     }
 
-    public void setRecording(String recording) {
+    public void setRecording(byte[] recording) {
         this.recording = recording;
     }
 }
