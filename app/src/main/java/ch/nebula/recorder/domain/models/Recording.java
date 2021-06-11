@@ -3,10 +3,7 @@ package ch.nebula.recorder.domain.models;
 import ch.nebula.recorder.core.RecordingType;
 import io.ebean.annotation.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -17,6 +14,7 @@ public class Recording extends BaseModel {
     String name;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     RecordingType recordingType;
 
     @Size(max = 50)

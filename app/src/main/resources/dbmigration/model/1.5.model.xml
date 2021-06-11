@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <alterColumn columnName="recording_type" tableName="recordings" type="varchar(3)" currentType="integer" currentNotnull="true" checkConstraint="check ( recording_type in ('GIF'))" checkConstraintName="ck_recordings_recording_type"/>
+    </changeSet>
+</migration>
