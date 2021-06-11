@@ -4,6 +4,7 @@ import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.domain.models.Recording;
 import ch.nebula.recorder.domain.models.User;
+import ch.nebula.recorder.domain.models.query.QRecording;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import com.typesafe.config.Config;
 
@@ -31,6 +32,11 @@ public class RecordingService {
         }
 
         var name = user.getId() + "-" + recordingUploadRequest.getName();
+        var recording = new QRecording().name.equalTo(name).findOne();
+        if (recording != null) {
+            throw new InvalidDataException(Map.of("-", "Recording already exists"));
+        }
+
         var data = recordingUploadRequest.getRecording();
         write(name, data);
 
