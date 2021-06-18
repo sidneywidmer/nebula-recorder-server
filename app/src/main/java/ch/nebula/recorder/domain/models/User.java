@@ -61,6 +61,10 @@ public class User extends BaseModel {
         return whenActivated;
     }
 
+    public boolean isActive() {
+        return getWhenActivated() != null;
+    }
+
     public void setWhenActivated(Instant whenActivated) {
         this.whenActivated = whenActivated;
     }
