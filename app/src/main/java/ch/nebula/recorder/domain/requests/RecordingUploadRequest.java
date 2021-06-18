@@ -5,6 +5,7 @@ import io.ebean.annotation.NotNull;
 
 import javax.persistence.Lob;
 import javax.validation.constraints.Size;
+import java.util.Base64;
 
 public class RecordingUploadRequest {
     @Size(max = 30)
@@ -50,6 +51,6 @@ public class RecordingUploadRequest {
     }
 
     public void setRecording(byte[] recording) {
-        this.recording = recording;
+        this.recording = Base64.getDecoder().decode(recording);
     }
 }
