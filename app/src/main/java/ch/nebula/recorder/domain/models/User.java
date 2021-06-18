@@ -25,7 +25,7 @@ public class User extends BaseModel {
     @Size(min = 10, max = 10)
     String activationCode;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, orphanRemoval = true)
     Set<Recording> recordings;
 
     public User(String email, String password) {

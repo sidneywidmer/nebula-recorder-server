@@ -34,9 +34,9 @@ public class RecordingController extends BaseController {
 
     public String getOne(Context ctx) throws ApiException {
         var recordingGetOneRequest = this.validate(ctx, RecordingGetOneRequest.class);
-        recordingService.getOne(recordingGetOneRequest.getId());
+        String recording = recordingService.getOne(recordingGetOneRequest.getId());
 
         ctx.status(200);
-        return null;
+        return recording;
     }
 }

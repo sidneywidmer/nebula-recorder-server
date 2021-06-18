@@ -2,11 +2,13 @@ package ch.nebula.recorder.domain.services;
 
 import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
+import ch.nebula.recorder.core.exceptions.RecordingNotFoundException;
 import ch.nebula.recorder.domain.models.Recording;
 import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.models.query.QRecording;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import com.typesafe.config.Config;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -58,9 +60,19 @@ public class RecordingService {
      * If a user wants so see a specific recording this method generates a JSON of the specific recording if it is
      * available.
      */
-    public String getOne(long id) {
-        //TODO oli: implement method
-        return null;
+    public String getOne(long id) throws RecordingNotFoundException {
+        var recording = new QRecording().id.equalTo(id).findOne();
+        if (recording == null) {
+            throw new RecordingNotFoundException(String.format("Recording with id: %d not found.", id));
+        }
+
+        //nebula.sidney.dev/files/1-recording-123123123.gif
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", recording.getName());
+        jsonObject.put("url", recording.getName());
+
+        return jsonObject.toString();
     }
 
     private void write(String name, byte[] data) throws InvalidDataException {
