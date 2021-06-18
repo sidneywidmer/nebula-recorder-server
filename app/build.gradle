@@ -65,3 +65,9 @@ task makeMigrations(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     main = 'ch.nebula.recorder.GenerateDbMigration'
 }
+
+task printClasspath {
+    doLast {
+        println sourceSets.main.runtimeClasspath.asPath
+    }
+}
