@@ -49,7 +49,7 @@ public class RecordingService {
      * If a user wants to see all his uploaded recordings this method generates a JSON of all available recordings by
      * validating if the passed user id exists.
      */
-    public String getAll(long userId) {
+    public String getAll(User user) {
         //TODO oli: implement method
         return null;
     }
@@ -58,7 +58,7 @@ public class RecordingService {
      * If a user wants so see a specific recording this method generates a JSON of the specific recording if it is
      * available.
      */
-    public String getOne(String name) {
+    public String getOne(long id) {
         //TODO oli: implement method
         return null;
     }

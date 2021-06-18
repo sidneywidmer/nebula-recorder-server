@@ -1,7 +1,6 @@
 package ch.nebula.recorder.web.controllers;
 
 import ch.nebula.recorder.core.exceptions.ApiException;
-import ch.nebula.recorder.domain.requests.RecordingGetAllRequest;
 import ch.nebula.recorder.domain.requests.RecordingGetOneRequest;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import ch.nebula.recorder.domain.services.RecordingService;
@@ -27,8 +26,7 @@ public class RecordingController extends BaseController {
     }
 
     public String getAll(Context ctx) throws ApiException {
-        var recordingGetAllRequest = this.validate(ctx, RecordingGetAllRequest.class);
-        recordingService.getAll(recordingGetAllRequest.getUserId());
+        recordingService.getAll(ctx.attribute("user"));
 
         ctx.status(200);
         return null;
@@ -36,7 +34,7 @@ public class RecordingController extends BaseController {
 
     public String getOne(Context ctx) throws ApiException {
         var recordingGetOneRequest = this.validate(ctx, RecordingGetOneRequest.class);
-        recordingService.getOne(recordingGetOneRequest.getName());
+        recordingService.getOne(recordingGetOneRequest.getId());
 
         ctx.status(200);
         return null;

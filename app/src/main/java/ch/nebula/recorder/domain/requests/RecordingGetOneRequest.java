@@ -2,18 +2,15 @@ package ch.nebula.recorder.domain.requests;
 
 import io.ebean.annotation.NotNull;
 
-import javax.validation.constraints.Size;
-
 public class RecordingGetOneRequest {
-    @Size(max = 30)
     @NotNull
-    String name;
+    long id;
 
-    public String getName() {
-        return name;
+    public long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(long id) {
+        this.id = id;
     }
 }
