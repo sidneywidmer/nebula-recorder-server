@@ -32,7 +32,7 @@ public class Router implements Component {
     public void register(Javalin app) {
         app.routes(() -> {
             path("api/user/signup", () -> post(userController::signup));
-            path("api/user/activate", () -> post(userController::activate));
+            path("api/user/activate", () -> get(userController::activate));
             path("api/auth/login", () -> post(authController::login));
             path("api/auth/check", () -> get(authController::check, roles(AUTHENTICATED)));
             path("api/recording/upload", () -> post(recordingController::upload, roles(AUTHENTICATED)));
