@@ -25,18 +25,16 @@ public class RecordingController extends BaseController {
         ctx.status(200);
     }
 
-    public String getAll(Context ctx) throws ApiException {
-        recordingService.getAll(ctx.attribute("user"));
+    public void getAll(Context ctx) throws ApiException {
+        var recordings = recordingService.getAll(ctx.attribute("user"));
 
-        ctx.status(200);
-        return null;
+        ctx.result(recordings);
     }
 
-    public String getOne(Context ctx) throws ApiException {
+    public void getOne(Context ctx) throws ApiException {
         var recordingGetOneRequest = this.validate(ctx, RecordingGetOneRequest.class);
-        String recording = recordingService.getOne(recordingGetOneRequest.getId());
+        var recording = recordingService.getOne(recordingGetOneRequest.getId());
 
-        ctx.status(200);
-        return recording;
+        ctx.result(recording);
     }
 }

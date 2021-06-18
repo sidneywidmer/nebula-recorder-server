@@ -8,12 +8,14 @@ import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.models.query.QRecording;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import com.typesafe.config.Config;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class RecordingService {
@@ -51,9 +53,21 @@ public class RecordingService {
      * If a user wants to see all his uploaded recordings this method generates a JSON of all available recordings by
      * validating if the passed user id exists.
      */
-    public String getAll(User user) {
-        //TODO oli: implement method
-        return null;
+    public String getAll(User user) throws RecordingNotFoundException {
+        List<Recording> recordings = new QRecording().user.equalTo(user).findList();
+        if (recordings.isEmpty()) {
+            throw new RecordingNotFoundException(String.format("Recordings for user: %d not found.", user.getId()));
+        }
+
+        var jsonArray = new JSONArray();
+        for (Recording recording : recordings) {
+            var jsonObject = new JSONObject();
+            jsonObject.put("name", recording.getName());
+            jsonObject.put("url", url(recording.getId(), recording.getName()));
+
+            jsonArray.put(jsonObject);
+        }
+        return jsonArray.toString(1);
     }
 
     /**
@@ -66,13 +80,11 @@ public class RecordingService {
             throw new RecordingNotFoundException(String.format("Recording with id: %d not found.", id));
         }
 
-        //nebula.sidney.dev/files/1-recording-123123123.gif
-
-        JSONObject jsonObject = new JSONObject();
+        var jsonObject = new JSONObject();
         jsonObject.put("name", recording.getName());
-        jsonObject.put("url", recording.getName());
+        jsonObject.put("url", url(recording.getId(), recording.getName()));
 
-        return jsonObject.toString();
+        return jsonObject.toString(1);
     }
 
     private void write(String name, byte[] data) throws InvalidDataException {
@@ -91,5 +103,9 @@ public class RecordingService {
         }
 
         recording.save();
+    }
+
+    private String url(long id, String name) {
+        return String.format("%s/%d-recording-%s", config.getString("file.path"), id, name);
     }
 }
