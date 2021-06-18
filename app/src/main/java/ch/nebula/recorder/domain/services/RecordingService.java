@@ -45,6 +45,24 @@ public class RecordingService {
         create(name, recordingType, description, user);
     }
 
+    /**
+     * If a user wants to see all his uploaded recordings this method generates a JSON of all available recordings by
+     * validating if the passed user id exists.
+     */
+    public String getAll(long userId) {
+        //TODO oli: implement method
+        return null;
+    }
+
+    /**
+     * If a user wants so see a specific recording this method generates a JSON of the specific recording if it is
+     * available.
+     */
+    public String getOne(String name) {
+        //TODO oli: implement method
+        return null;
+    }
+
     private void write(String name, byte[] data) throws InvalidDataException {
         try {
             Files.write(Paths.get(config.getString("file.path"), name), data);
