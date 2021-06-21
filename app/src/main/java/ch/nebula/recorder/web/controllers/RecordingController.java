@@ -3,7 +3,6 @@ package ch.nebula.recorder.web.controllers;
 import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
-import ch.nebula.recorder.domain.requests.RecordingGetOneRequest;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import ch.nebula.recorder.domain.services.RecordingService;
 import io.javalin.http.Context;
@@ -12,6 +11,8 @@ import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
+
+import static java.lang.Long.parseLong;
 
 public class RecordingController extends BaseController {
     private final RecordingService recordingService;
@@ -51,14 +52,14 @@ public class RecordingController extends BaseController {
     public void getAll(Context ctx) throws ApiException {
         var recordings = recordingService.getAll(ctx.attribute("user"));
 
-        ctx.result(recordings);
+        ctx.contentType("application/json").result(recordings);
     }
 
     public void getOne(Context ctx) throws ApiException {
-        var recordingGetOneRequest = this.validateJson(ctx, RecordingGetOneRequest.class);
-        var recording = recordingService.getOne(recordingGetOneRequest.getId());
+        var id = ctx.pathParam("id");
+        var recording = recordingService.getOne(parseLong(id));
 
-        ctx.result(recording);
+        ctx.contentType("application/json").result(recording);
     }
 
     /**
