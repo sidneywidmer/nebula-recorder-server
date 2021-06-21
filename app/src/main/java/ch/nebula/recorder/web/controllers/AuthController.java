@@ -25,7 +25,7 @@ public class AuthController extends BaseController {
     }
 
     public void login(Context ctx) throws ApiException, SystemException {
-        var userLogin = (LoginRequest) this.validate(ctx, LoginRequest.class);
+        var userLogin = (LoginRequest) this.validateJson(ctx, LoginRequest.class);
         var token = this.authService.generateToken(userLogin);
 
         ctx.json(model("token", token));

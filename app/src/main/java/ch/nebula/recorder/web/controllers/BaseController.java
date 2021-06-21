@@ -20,12 +20,11 @@ public abstract class BaseController {
         this.validator = validator;
     }
 
-
     /**
      * Tries to map the given ctx.body to our clazz and if this succeeds we trigger
      * bean validation. If all goes well a clazz instance is returned.
      */
-    protected <T> T validate(Context ctx, Class<T> clazz) throws ApiException {
+    protected <T> T validateJson(Context ctx, Class<T> clazz) throws ApiException {
         return validateData(ctx.body(), clazz);
     }
 

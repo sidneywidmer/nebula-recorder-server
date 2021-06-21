@@ -26,7 +26,7 @@ public class UserController extends BaseController {
     }
 
     public void signup(Context ctx) throws ApiException, SystemException {
-        var userSignup = (UserSignupRequest) this.validate(ctx, UserSignupRequest.class);
+        var userSignup = (UserSignupRequest) this.validateJson(ctx, UserSignupRequest.class);
         var user = this.userService.create(userSignup);
         this.mailService.sendActivationMail(user);
 

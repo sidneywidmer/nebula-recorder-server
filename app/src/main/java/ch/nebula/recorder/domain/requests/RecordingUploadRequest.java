@@ -2,13 +2,14 @@ package ch.nebula.recorder.domain.requests;
 
 import ch.nebula.recorder.core.RecordingType;
 import io.ebean.annotation.NotNull;
+import io.javalin.http.UploadedFile;
 
 import javax.persistence.Lob;
 import javax.validation.constraints.Size;
 import java.util.Base64;
 
 public class RecordingUploadRequest {
-    @Size(max = 30)
+    @Size(max = 30, min = 5)
     @NotNull
     String name;
 
@@ -19,8 +20,7 @@ public class RecordingUploadRequest {
     String description;
 
     @NotNull
-    @Lob
-    byte[] recording;
+    UploadedFile recording;
 
     public String getName() {
         return name;
@@ -46,11 +46,11 @@ public class RecordingUploadRequest {
         this.description = description;
     }
 
-    public byte[] getRecording() {
+    public UploadedFile getRecording() {
         return recording;
     }
 
-    public void setRecording(byte[] recording) {
-        this.recording = Base64.getDecoder().decode(recording);
+    public void setRecording(UploadedFile recording) {
+        this.recording = recording;
     }
 }
