@@ -8,6 +8,8 @@ import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.models.query.QRecording;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import com.typesafe.config.Config;
+import io.javalin.core.util.FileUtil;
+import io.javalin.http.UploadedFile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -87,12 +89,9 @@ public class RecordingService {
         return jsonObject.toString(1);
     }
 
-    private void write(String name, byte[] data) throws InvalidDataException {
-        try {
-            Files.write(Paths.get(config.getString("storage.recordings-path"), name), data);
-        } catch (IOException e) {
-            throw new InvalidDataException(Map.of("-", ""));
-        }
+    private void write(String name, UploadedFile data) {
+        var path = Paths.get(config.getString("storage.recordings-path"), name);
+        FileUtil.streamToFile(data.getContent(), path.toString());
     }
 
     private void create(String name, RecordingType recordingType, String description, User user) {
