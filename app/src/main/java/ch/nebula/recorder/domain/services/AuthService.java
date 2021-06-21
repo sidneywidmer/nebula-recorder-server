@@ -32,7 +32,7 @@ public class AuthService {
      */
     public String generateToken(LoginRequest login) throws PermissionDeniedException, SystemException {
         var user = userService.byEmailAndPassword(login);
-        if (user.isEmpty()) {
+        if (user.isEmpty() || !user.get().isActive()) {
             throw new PermissionDeniedException();
         }
 

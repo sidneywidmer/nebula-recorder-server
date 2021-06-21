@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="recordings" pkName="pk_recordings">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar(30)" notnull="true"/>
+            <column name="recording_type" type="integer" notnull="true" checkConstraint="check ( recording_type in (0))" checkConstraintName="ck_recordings_recording_type"/>
+            <column name="description" type="varchar(50)"/>
+            <column name="user_id" type="bigint" notnull="true" references="users.id" foreignKeyName="fk_recordings_user_id" foreignKeyIndex="ix_recordings_user_id"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>

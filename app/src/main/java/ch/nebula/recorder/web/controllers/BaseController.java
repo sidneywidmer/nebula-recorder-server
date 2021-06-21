@@ -9,6 +9,7 @@ import ch.nebula.recorder.core.exceptions.InvalidDataException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.HashMap;
 import java.util.Set;
 
 public abstract class BaseController {
@@ -25,11 +26,33 @@ public abstract class BaseController {
      * bean validation. If all goes well a clazz instance is returned.
      */
     protected <T> T validate(Context ctx, Class<T> clazz) throws ApiException {
+        return validateData(ctx.body(), clazz);
+    }
+
+    /**
+     * Same as validate, but instead of trying to get the json from the ctx body
+     * we convert all GET parameters to json first. Since javalin supports
+     * query param lists we need to prepare our data before using it -
+     * in our scenario lists are never used or expected.
+     */
+    protected <T> T validateQuery(Context ctx, Class<T> clazz) throws ApiException {
+        var data = new HashMap<String, String>();
+        ctx.queryParamMap().forEach((key, values) -> data.put(key, values.get(0)));
+
+        try {
+            var json = new ObjectMapper().writeValueAsString(data);
+            return validateData(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new ApiException();
+        }
+    }
+
+    protected <T> T validateData(String data, Class<T> clazz) throws ApiException {
         var objectMapper = new ObjectMapper();
         T instance = null;
 
         try {
-            instance = objectMapper.readValue(ctx.body(), clazz);
+            instance = objectMapper.readValue(data, clazz);
         } catch (JsonProcessingException e) {
             throw new ApiException();
         }

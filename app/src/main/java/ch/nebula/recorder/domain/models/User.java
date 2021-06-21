@@ -3,10 +3,13 @@ package ch.nebula.recorder.domain.models;
 
 import io.ebean.annotation.NotNull;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +24,9 @@ public class User extends BaseModel {
 
     @Size(min = 10, max = 10)
     String activationCode;
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    Set<Recording> recordings;
 
     public User(String email, String password) {
         this.email = email;
@@ -55,7 +61,20 @@ public class User extends BaseModel {
         return whenActivated;
     }
 
+    public boolean isActive() {
+        return getWhenActivated() != null;
+    }
+
     public void setWhenActivated(Instant whenActivated) {
         this.whenActivated = whenActivated;
+    }
+
+    public Set<Recording> getRecordings() {
+        return recordings;
+    }
+
+    public void setRecordings(Set<Recording> recordings) {
+        this.recordings = recordings;
+
     }
 }

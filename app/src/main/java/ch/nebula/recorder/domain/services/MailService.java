@@ -12,7 +12,6 @@ import java.util.Base64;
 import java.util.Map;
 
 public class MailService {
-
     private final Configuration mailGunConfig;
     private final TemplateEngine engine;
     private final Config config;

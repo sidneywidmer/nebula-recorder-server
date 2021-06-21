@@ -41,6 +41,7 @@ dependencies {
     implementation 'net.sargue:mailgun:1.10.0'
     implementation 'com.sun.activation:javax.activation:1.2.0'
     implementation 'io.pebbletemplates:pebble:3.1.5'
+    implementation 'org.json:json:20210307'
 
     // query bean generation
     annotationProcessor 'io.ebean:querybean-generator:12.8.0'
@@ -64,4 +65,10 @@ task fatJar(type: Jar) {
 task makeMigrations(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     main = 'ch.nebula.recorder.GenerateDbMigration'
+}
+
+task printClasspath {
+    doLast {
+        println sourceSets.main.runtimeClasspath.asPath
+    }
 }
