@@ -6,6 +6,7 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 
 [env]
+JAVA_OPTS="-Xms50M -Xmx50M"
 
 [experimental]
   auto_rollback = true
