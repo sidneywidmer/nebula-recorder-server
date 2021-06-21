@@ -89,7 +89,7 @@ public class RecordingService {
 
     private void write(String name, byte[] data) throws InvalidDataException {
         try {
-            Files.write(Paths.get(config.getString("file.path"), name), data);
+            Files.write(Paths.get(config.getString("storage.recordings-path"), name), data);
         } catch (IOException e) {
             throw new InvalidDataException(Map.of("-", ""));
         }
@@ -106,6 +106,6 @@ public class RecordingService {
     }
 
     private String url(long id, String name) {
-        return String.format("%s/%d-recording-%s", config.getString("file.path"), id, name);
+        return String.format("%s/%d-recording-%s", config.getString("storage.recordings-path"), id, name);
     }
 }

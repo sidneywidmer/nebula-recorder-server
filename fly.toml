@@ -10,6 +10,10 @@ kill_timeout = 5
 [experimental]
   auto_rollback = true
 
+[mounts]
+  source="recorder_data"
+  destination="/data"
+
 [[services]]
   http_checks = []
   internal_port = 8000
