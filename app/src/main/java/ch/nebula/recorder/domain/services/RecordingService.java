@@ -14,8 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -57,18 +55,17 @@ public class RecordingService {
      */
     public String getAll(User user) throws RecordingNotFoundException {
         List<Recording> recordings = new QRecording().user.equalTo(user).findList();
-        if (recordings.isEmpty()) {
-            throw new RecordingNotFoundException(String.format("Recordings for user: %d not found.", user.getId()));
-        }
 
         var jsonArray = new JSONArray();
         for (Recording recording : recordings) {
             var jsonObject = new JSONObject();
+            jsonObject.put("id", recording.getId());
             jsonObject.put("name", recording.getName());
-            jsonObject.put("url", url(recording.getId(), recording.getName()));
+            jsonObject.put("url", url(recording));
 
             jsonArray.put(jsonObject);
         }
+
         return jsonArray.toString(1);
     }
 
@@ -83,8 +80,9 @@ public class RecordingService {
         }
 
         var jsonObject = new JSONObject();
+        jsonObject.put("id", recording.getId());
         jsonObject.put("name", recording.getName());
-        jsonObject.put("url", url(recording.getId(), recording.getName()));
+        jsonObject.put("url", url(recording));
 
         return jsonObject.toString(1);
     }
@@ -104,7 +102,7 @@ public class RecordingService {
         recording.save();
     }
 
-    private String url(long id, String name) {
-        return String.format("%s/%d-recording-%s", config.getString("storage.recordings-path"), id, name);
+    private String url(Recording recording) {
+        return "/recordings/" + recording.getName();
     }
 }
