@@ -34,9 +34,9 @@ public class UserController extends BaseController {
     }
 
     public void activate(Context ctx) throws ApiException, SystemException {
-        var userActivation = this.validate(ctx, UserActivateRequest.class);
+        var userActivation = this.validateQuery(ctx, UserActivateRequest.class);
         this.userService.activate(userActivation);
 
-        ctx.status(200);
+        ctx.redirect("/?activation=true");
     }
 }

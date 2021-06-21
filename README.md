@@ -44,7 +44,7 @@ Controllers are connected to routes in our `Router`. The must extend `BaseContro
 
 ### Validation
 
-Validation is done via [bean validation](https://beanvalidation.org/) which is the defacto standard in the java world. To validate incoming json data, you should create a `FooRequest` in `domain/requests` with alle the necessary validation annotations. A good example could be a `UserSignupRequest` or as `UserLoginRequest`. 
+Validation is done via [bean validation](https://beanvalidation.org/) which is the defacto standard in the java world. To validate incoming json data, you should create a `FooRequest` in `domain/requests` with all the necessary validation annotations. A good example could be a `UserSignupRequest` or as `UserLoginRequest`. 
 
 En example flow could look like this:
 
@@ -53,6 +53,8 @@ En example flow could look like this:
 3. The validate method automatically tries to map the request body to the `UserSignupRequest` bean and trigger the validation on the `Validator` instance (which is automatically available on the `BaseController`)
 4. An empty `ApiException` is thrown if the json is invalid or if the given data could not be mapped to the request class
 5. A `InvalidDataException` is raised which contains any of the found rule violations (e.g invalid email field)
+
+Instead of `this.validate` you could also use `this.validateQuery` to the same thing except it would try to map your query params to the request class.
 
 ### Exception handling
 

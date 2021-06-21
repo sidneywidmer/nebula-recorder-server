@@ -1,10 +1,7 @@
 package ch.nebula.recorder.web;
 
 import ch.nebula.recorder.core.Component;
-import ch.nebula.recorder.core.exceptions.ApiException;
-import ch.nebula.recorder.core.exceptions.InvalidDataException;
-import ch.nebula.recorder.core.exceptions.PermissionDeniedException;
-import ch.nebula.recorder.core.exceptions.SystemException;
+import ch.nebula.recorder.core.exceptions.*;
 import io.javalin.Javalin;
 
 import static io.javalin.plugin.rendering.template.TemplateUtil.model;
@@ -19,6 +16,11 @@ public class ErrorHandler implements Component {
         app.exception(InvalidDataException.class, (e, ctx) -> {
             ctx.status(422);
             ctx.json(model("message", "Invalid data given", "code", "api.data.invalid", "fields", e.getMessages()));
+        });
+
+        app.exception(RecordingNotFoundException.class, (e, ctx) -> {
+            ctx.status(404);
+            ctx.json(model("message", e.getMessage(), "code", "api.resource.notfound"));
         });
 
         app.exception(PermissionDeniedException.class, (e, ctx) -> {
