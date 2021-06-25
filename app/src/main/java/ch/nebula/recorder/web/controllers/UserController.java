@@ -19,7 +19,7 @@ public class UserController extends BaseController {
     private final MailService mailService;
 
     @Inject
-    protected UserController(UserService userService, Validator validator, MailService mailService) {
+    public UserController(UserService userService, Validator validator, MailService mailService) {
         super(validator);
         this.userService = userService;
         this.mailService = mailService;

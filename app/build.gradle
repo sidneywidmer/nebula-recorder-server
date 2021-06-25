@@ -19,8 +19,11 @@ repositories {
 
 dependencies {
     // Use JUnit test framework.
-    testImplementation 'junit:junit:4.13'
     testImplementation 'io.ebean:ebean-test:12.8.0'
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("com.h2database:h2:.1.4.200")
 
     implementation 'com.google.guava:guava:29.0-jre'
     implementation 'io.javalin:javalin:3.13.6'
@@ -71,4 +74,8 @@ task printClasspath {
     doLast {
         println sourceSets.main.runtimeClasspath.asPath
     }
+}
+
+test {
+    useJUnitPlatform()
 }
