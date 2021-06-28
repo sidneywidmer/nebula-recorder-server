@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Simple dummy test just to ensure our h2 testing configuration works.
  */
-public class DummyTest {
+public class DummyTest extends BaseTest {
 
     @Test
     public void dummy() {
