@@ -1,14 +1,12 @@
 <template>
-  <router-link :to="'/recording/' + item.public_id">
-    <img style="width:100%;" src="https://via.placeholder.com/350x250"/>
+  <router-link :to="'/recording/' + item.id">
+    <img style="width:100%;" :src="'https://nebula.sidney.dev' + item.url"/>
     <div class="icon">
-      <ion-icon v-if="item.completed == true" name="play-outline"></ion-icon>
-      <ion-icon v-if="item.completed == false" name="image-outline"></ion-icon>
+      <ion-icon name="play-outline"></ion-icon>
     </div>
-    <div class="bookcover">
-      <h3>{{ item.title }}</h3>
-      <p> #funny #lol{{/* item.description | truncate(100, '...')*/}}</p>
-      <label class="label"><ion-icon name="person-circle-outline"></ion-icon> von <router-link to="/">Hans Muster{{item.author}}</router-link></label>
+    <div class="recordingcover">
+      <h3>{{ item.name }}</h3>
+      <label class="label"><ion-icon name="person-circle-outline"></ion-icon></label>
     </div>
   </router-link>
 </template>
@@ -32,7 +30,7 @@ export default {
   color: #c9c9c9;
   padding-top: 10px;
 }
-.bookcover {
+.recordingcover {
   margin-bottom: 50px;
   h3 {
     color: $shady-blue;

@@ -26,21 +26,6 @@
                   Abmelden
                 </a>
               </li>
-              <li v-if="isLoggedIn">
-                <router-link to="/account">
-                  <ion-icon name="person-outline"></ion-icon>
-                  Konto
-                </router-link>
-              </li>
-              <li>
-                <router-link to="/download">
-                  <ion-icon name="download-outline"></ion-icon>
-                  Client
-                </router-link>
-              </li>
-              <li v-if="!isLoggedIn">
-                <router-link to="/">Über Nebula</router-link>
-              </li>
             </ul>
           </div>
         </div>
