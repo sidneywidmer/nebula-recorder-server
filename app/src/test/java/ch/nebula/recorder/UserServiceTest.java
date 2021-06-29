@@ -4,10 +4,14 @@ import ch.nebula.recorder.core.Generator;
 import ch.nebula.recorder.core.Hasher;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
+import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.models.query.QUser;
+import ch.nebula.recorder.domain.requests.UserActivateRequest;
 import ch.nebula.recorder.domain.requests.UserSignupRequest;
 import ch.nebula.recorder.domain.services.UserService;
 import org.junit.jupiter.api.Test;
+
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,9 +28,8 @@ public class UserServiceTest extends BaseTest {
         request.setEmail("foo@bar.ch");
         request.setPassword("hunter123");
 
-        service.create(request);
+        var user = service.create(request);
 
-        var user = new QUser().email.equalTo(request.getEmail()).findOne();
         assertEquals(request.getEmail(), user.getEmail());
     }
 
@@ -39,8 +42,21 @@ public class UserServiceTest extends BaseTest {
         service.create(request);
 
         var exception = assertThrows(InvalidDataException.class, () -> service.create(request));
-        var first = exception.getMessages();
-
         assertTrue(exception.getMessages().get("_").contains("User already exists"));
+    }
+
+    @Test
+    public void givenActivationRequest_testHappyPath() throws ApiException {
+        var newUser = new User("foo@bar.ch", "hunter123");
+        newUser.setActivationCode("ABC");
+        newUser.save();
+
+        var request = new UserActivateRequest();
+        request.setEmail(Base64.getEncoder().encodeToString("foo@bar.ch".getBytes()));
+        request.setActivationCode(Base64.getEncoder().encodeToString("ABC".getBytes()));
+
+        service.activate(request);
+        var user = new QUser().email.equalTo("foo@bar.ch").findOne();
+        assertNotNull(user.getWhenActivated());
     }
 }
