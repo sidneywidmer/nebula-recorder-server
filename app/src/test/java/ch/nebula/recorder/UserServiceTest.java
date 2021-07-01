@@ -11,6 +11,7 @@ import ch.nebula.recorder.domain.requests.UserSignupRequest;
 import ch.nebula.recorder.domain.services.UserService;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +24,7 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenNewUser_testCreate() throws ApiException {
+    public void givenNewUser_testCreateHappyPath() throws ApiException {
         var request = new UserSignupRequest();
         request.setEmail("foo@bar.ch");
         request.setPassword("hunter123");
@@ -34,7 +35,7 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenExistingUser_testCreateThrows() throws ApiException {
+    public void givenExistingUser_testCreateThrowsUserAlreadyExists() throws ApiException {
         var request = new UserSignupRequest();
         request.setEmail("foo@bar.ch");
         request.setPassword("hunter123");
@@ -46,7 +47,7 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenActivationRequest_testHappyPath() throws ApiException {
+    public void givenActivationRequest_testActivateHappyPath() throws ApiException {
         var newUser = new User("foo@bar.ch", "hunter123");
         newUser.setActivationCode("ABC");
         newUser.save();
@@ -58,5 +59,44 @@ public class UserServiceTest extends BaseTest {
         service.activate(request);
         var user = new QUser().email.equalTo("foo@bar.ch").findOne();
         assertNotNull(user.getWhenActivated());
+    }
+
+    @Test
+    public void givenActivationRequest_testActivateThrowsUserDoesntExist() throws ApiException {
+        var request = new UserActivateRequest();
+        request.setEmail(Base64.getEncoder().encodeToString("foo@bar.ch".getBytes()));
+        request.setActivationCode(Base64.getEncoder().encodeToString("ABC".getBytes()));
+
+        var exception = assertThrows(InvalidDataException.class, () -> service.activate(request));
+        assertTrue(exception.getMessages().get("_").contains("User doesnt exist"));
+    }
+
+    @Test
+    public void givenActivationRequest_testActivateThrowsUserAlreadyActivated() throws ApiException {
+        var newUser = new User("foo@bar.ch", "hunter123");
+        newUser.setActivationCode("ABC");
+        newUser.setWhenActivated(Instant.now());
+        newUser.save();
+
+        var request = new UserActivateRequest();
+        request.setEmail(Base64.getEncoder().encodeToString("foo@bar.ch".getBytes()));
+        request.setActivationCode(Base64.getEncoder().encodeToString("ABC".getBytes()));
+
+        var exception = assertThrows(InvalidDataException.class, () -> service.activate(request));
+        assertTrue(exception.getMessages().get("_").contains("User already activated"));
+    }
+
+    @Test
+    public void givenActivationRequest_testActivateThrowsWrongActivationCode() throws ApiException {
+        var newUser = new User("foo@bar.ch", "hunter123");
+        newUser.setActivationCode("ABC");
+        newUser.save();
+
+        var request = new UserActivateRequest();
+        request.setEmail(Base64.getEncoder().encodeToString("foo@bar.ch".getBytes()));
+        request.setActivationCode(Base64.getEncoder().encodeToString("DEF".getBytes()));
+
+        var exception = assertThrows(InvalidDataException.class, () -> service.activate(request));
+        assertTrue(exception.getMessages().get("_").contains("Wrong activation code"));
     }
 }
