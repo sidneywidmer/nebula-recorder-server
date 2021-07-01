@@ -33,13 +33,13 @@ public class RecordingService {
      */
     public void upload(User user, RecordingUploadRequest recordingUploadRequest) throws InvalidDataException {
         if (user == null) {
-            throw new InvalidDataException(Map.of("-", "Illegal State"));
+            throw new InvalidDataException(Map.of("_", "Illegal State"));
         }
 
         var name = user.getId() + "-" + recordingUploadRequest.getName();
         var recording = new QRecording().name.equalTo(name).findOne();
         if (recording != null) {
-            throw new InvalidDataException(Map.of("-", "Recording already exists"));
+            throw new InvalidDataException(Map.of("_", "Recording already exists"));
         }
 
         var data = recordingUploadRequest.getRecording();
