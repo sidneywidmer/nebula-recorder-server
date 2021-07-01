@@ -21,6 +21,7 @@ import java.util.Map;
 public class RecordingService {
     private final Config config;
 
+
     @Inject
     public RecordingService(Config config) {
         this.config = config;
