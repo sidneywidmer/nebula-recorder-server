@@ -5,17 +5,19 @@ import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.core.exceptions.RecordingNotFoundException;
+import ch.nebula.recorder.domain.models.Recording;
 import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.javalin.http.UploadedFile;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class RecordingServiceTest extends BaseTest {
     private final RecordingService recordingService;
@@ -56,7 +58,10 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
-        recordingService.upload(user, recordingUploadRequest);
+        Recording recording = recordingService.upload(user, recordingUploadRequest);
+        assert (recording != null);
+        assert (recording.getName().contains(recordingUploadRequest.getName()));
+        assert (recordingUploadRequest.getDescription().equals(recording.getDescription()));
     }
 
     @Test
@@ -72,8 +77,8 @@ public class RecordingServiceTest extends BaseTest {
 
         recordingService.upload(user, recordingUploadRequest);
 
-        var exception = assertThrows(InvalidDataException.class, () -> recordingService.upload(user, recordingUploadRequest));
-        assertTrue(exception.getMessages().get("_").contains("Recording already exists"));
+        var exception = Assertions.assertThrows(InvalidDataException.class, () -> recordingService.upload(user, recordingUploadRequest));
+        assert ((exception.getMessages().get("_").contains("Recording already exists")));
     }
 
     @Test
@@ -90,13 +95,15 @@ public class RecordingServiceTest extends BaseTest {
         var recording = recordingService.upload(user, recordingUploadRequest);
         var recordingJson = recordingService.getOne(recording.getId());
 
-        assert(recordingJson.contains(recording.getName()));
+        assert (recordingJson.contains(recording.getName()));
+        assert (recordingJson.contains(String.valueOf(recording.getId())));
+        assert (recordingJson.contains(String.format("/recordings/%s", recording.getName())));
     }
 
     @Test
     public void givenUploadRequest_getOneThrowsRecordingNotFoundException() throws ApiException {
-        var exception = assertThrows(RecordingNotFoundException.class, () -> recordingService.getOne(99));
-        assertTrue(exception.getMessage().contains("Recording with id: 99 not found."));
+        var exception = Assertions.assertThrows(RecordingNotFoundException.class, () -> recordingService.getOne(99));
+        assert ((exception.getMessage().contains("Recording with id: 99 not found.")));
     }
 
     @Test
@@ -110,8 +117,11 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
+        var recording = recordingService.upload(user, recordingUploadRequest);
+        var recordingJson = recordingService.getAll(user);
 
-        recordingService.upload(user, recordingUploadRequest);
-        recordingService.getAll(user);
+        assert (recordingJson.contains(recording.getName()));
+        assert (recordingJson.contains(String.valueOf(recording.getId())));
+        assert (recordingJson.contains(String.format("/recordings/%s", recording.getName())));
     }
 }
