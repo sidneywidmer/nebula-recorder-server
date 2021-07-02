@@ -1,45 +1,28 @@
 package ch.nebula.recorder.domain.services;
 
 import ch.nebula.recorder.BaseTest;
-import ch.nebula.recorder.core.Generator;
-import ch.nebula.recorder.core.Hasher;
 import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.core.exceptions.RecordingNotFoundException;
 import ch.nebula.recorder.domain.models.User;
-import ch.nebula.recorder.domain.models.query.QUser;
-import ch.nebula.recorder.domain.requests.LoginRequest;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
-import ch.nebula.recorder.domain.requests.UserActivateRequest;
-import ch.nebula.recorder.domain.requests.UserSignupRequest;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.javalin.http.UploadedFile;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RecordingServiceTest extends BaseTest {
     private final RecordingService recordingService;
-    private final UserService userService;
-    private final AuthService authService;
-    private final Config config = ConfigFactory.load("app");
 
     public RecordingServiceTest() {
-        var verifier = JWT.require(Algorithm.HMAC256(config.getString("auth.jwt-secret"))).build();
+        Config config = ConfigFactory.load("app");
         recordingService = new RecordingService(config);
-        userService = new UserService(new Hasher(), new Generator());
-        authService = new AuthService(verifier, userService, config);
     }
 
     public User getUser() {
