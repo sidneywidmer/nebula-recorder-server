@@ -22,7 +22,7 @@ jobs:
           java-version: '16'
           distribution: 'adopt'
       - name: Add config file
-      - run: cp app/src/main/resources/app.ghaction.conf app/src/main/resources/app.conf
+        run: cp app/src/main/resources/app.ghaction.conf app/src/main/resources/app.conf
       - name: Build with Gradle
         run: ./gradlew test
 
