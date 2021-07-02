@@ -31,7 +31,7 @@ public class RecordingService {
      * After a user finished a recording on the client it can be uploaded to the server.
      * Uploaded means the file is written on a filesystem and a recording dbo is generated.
      */
-    public void upload(User user, RecordingUploadRequest recordingUploadRequest) throws InvalidDataException {
+    public Recording upload(User user, RecordingUploadRequest recordingUploadRequest) throws InvalidDataException {
         if (user == null) {
             throw new InvalidDataException(Map.of("_", "Illegal State"));
         }
@@ -47,7 +47,8 @@ public class RecordingService {
 
         var description = recordingUploadRequest.getDescription();
         var recordingType = recordingUploadRequest.getType();
-        create(name, recordingType, description, user);
+
+        return create(name, recordingType, description, user);
     }
 
     /**
@@ -93,7 +94,7 @@ public class RecordingService {
         FileUtil.streamToFile(data.getContent(), path.toString());
     }
 
-    private void create(String name, RecordingType recordingType, String description, User user) {
+    private Recording create(String name, RecordingType recordingType, String description, User user) {
         var recording = new Recording(name, recordingType, user);
 
         if (description != null && !"".equals(description)) {
@@ -101,6 +102,8 @@ public class RecordingService {
         }
 
         recording.save();
+
+        return recording;
     }
 
     private String url(Recording recording) {
