@@ -87,8 +87,10 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
-        recordingService.upload(user, recordingUploadRequest);
-        recordingService.getOne(user.getId());
+        var recording = recordingService.upload(user, recordingUploadRequest);
+        var recordingJson = recordingService.getOne(recording.getId());
+
+        assert(recordingJson.contains(recording.getName()));
     }
 
     @Test
