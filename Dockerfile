@@ -11,7 +11,7 @@ FROM gradle:jdk16 as builder
 COPY --from=frontend --chown=gradle:gradle /app /home/gradle/src
 COPY app/src/main/resources/app.prod.conf /home/gradle/src/app/src/main/resources/app.conf
 WORKDIR /home/gradle/src
-RUN gradle build && gradle fatJar
+RUN gradle build -x test && gradle fatJar
 
 FROM openjdk:16-alpine
 
