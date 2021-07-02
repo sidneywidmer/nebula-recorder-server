@@ -23,7 +23,7 @@ jobs:
           distribution: 'adopt'
       - name: Add config file
         run: cp app/src/main/resources/app.ghaction.conf app/src/main/resources/app.conf
-      - name: Build with Gradle
+      - name: Run gradle tests
         run: ./gradlew test
 
   deploy:
