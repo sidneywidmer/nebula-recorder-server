@@ -7,6 +7,8 @@ import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.core.exceptions.RecordingNotFoundException;
+import ch.nebula.recorder.domain.models.User;
+import ch.nebula.recorder.domain.models.query.QUser;
 import ch.nebula.recorder.domain.requests.LoginRequest;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import ch.nebula.recorder.domain.requests.UserActivateRequest;
@@ -16,12 +18,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.javalin.http.UploadedFile;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.Base64;
 
@@ -41,27 +42,32 @@ public class RecordingServiceTest extends BaseTest {
         authService = new AuthService(verifier, userService, config);
     }
 
+    public User getUser() {
+        var user = new User("foo@bar.ch", "super-secret-hash");
+        user.setActivationCode("activateme");
+        user.save();
+
+        return user;
+    }
+
+    public UploadedFile getUpload() throws FileNotFoundException {
+        var dummyFile = new File("src/test/resources/dummy.gif");
+        return new UploadedFile(
+                new FileInputStream(dummyFile),
+                "GIF",
+                0,
+                "example.gif",
+                ".gif",
+                0
+        );
+    }
+
     @Test
-    public void givenUploadRequest_HappyPath() throws ApiException, IOException {
-        var signupRequest = new UserSignupRequest();
-        signupRequest.setEmail("foo@bar.ch");
-        signupRequest.setPassword("hunter123");
-        var user = userService.create(signupRequest);
-
-        var userActivateRequest = new UserActivateRequest();
-        userActivateRequest.setEmail(Base64.getEncoder().encodeToString(user.getEmail().getBytes()));
-        userActivateRequest.setActivationCode(Base64.getEncoder().encodeToString(user.getActivationCode().getBytes()));
-        userService.activate(userActivateRequest);
-
-        var loginRequest = new LoginRequest();
-        loginRequest.setEmail("foo@bar.ch");
-        loginRequest.setPassword("hunter123");
-        authService.generateToken(loginRequest);
+    public void givenUploadRequest_happyPath() throws ApiException, IOException {
+        var user = getUser();
+        var uploadedFile = getUpload();
 
         var recordingUploadRequest = new RecordingUploadRequest();
-        var path = Paths.get(config.getString("storage.recordings-path"), "example.gif");
-        InputStream inputStream = new FileInputStream(path.toFile());
-        UploadedFile uploadedFile = new UploadedFile(inputStream, "GIF", 0, "example.gif", ".gif", 0);
         recordingUploadRequest.setRecording(uploadedFile);
         recordingUploadRequest.setName(uploadedFile.getFilename());
         recordingUploadRequest.setType(RecordingType.GIF);
@@ -71,30 +77,16 @@ public class RecordingServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenUploadRequest_ThrowsFileAlreadyExists() throws ApiException, IOException {
-        var signupRequest = new UserSignupRequest();
-        signupRequest.setEmail("foo@bar.ch");
-        signupRequest.setPassword("hunter123");
-        var user = userService.create(signupRequest);
-
-        var userActivateRequest = new UserActivateRequest();
-        userActivateRequest.setEmail(Base64.getEncoder().encodeToString(user.getEmail().getBytes()));
-        userActivateRequest.setActivationCode(Base64.getEncoder().encodeToString(user.getActivationCode().getBytes()));
-        userService.activate(userActivateRequest);
-
-        var loginRequest = new LoginRequest();
-        loginRequest.setEmail("foo@bar.ch");
-        loginRequest.setPassword("hunter123");
-        authService.generateToken(loginRequest);
+    public void givenUploadRequest_throwsFileAlreadyExists() throws ApiException, IOException {
+        var user = getUser();
+        var uploadedFile = getUpload();
 
         var recordingUploadRequest = new RecordingUploadRequest();
-        var path = Paths.get(config.getString("storage.recordings-path"), "example.gif");
-        InputStream inputStream = new FileInputStream(path.toFile());
-        UploadedFile uploadedFile = new UploadedFile(inputStream, "GIF", 0, "example.gif", ".gif", 0);
         recordingUploadRequest.setRecording(uploadedFile);
         recordingUploadRequest.setName(uploadedFile.getFilename());
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
+
         recordingService.upload(user, recordingUploadRequest);
 
         var exception = assertThrows(InvalidDataException.class, () -> recordingService.upload(user, recordingUploadRequest));
@@ -102,66 +94,37 @@ public class RecordingServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenUploadRequest_GetOneHappyPath() throws ApiException, FileNotFoundException {
-        var signupRequest = new UserSignupRequest();
-        signupRequest.setEmail("foo@bar.ch");
-        signupRequest.setPassword("hunter123");
-        var user = userService.create(signupRequest);
-
-        var userActivateRequest = new UserActivateRequest();
-        userActivateRequest.setEmail(Base64.getEncoder().encodeToString(user.getEmail().getBytes()));
-        userActivateRequest.setActivationCode(Base64.getEncoder().encodeToString(user.getActivationCode().getBytes()));
-        userService.activate(userActivateRequest);
-
-        var loginRequest = new LoginRequest();
-        loginRequest.setEmail("foo@bar.ch");
-        loginRequest.setPassword("hunter123");
-        authService.generateToken(loginRequest);
+    public void givenUploadRequest_getOneHappyPath() throws ApiException, FileNotFoundException {
+        var user = getUser();
+        var uploadedFile = getUpload();
 
         var recordingUploadRequest = new RecordingUploadRequest();
-        var path = Paths.get(config.getString("storage.recordings-path"), "example.gif");
-        InputStream inputStream = new FileInputStream(path.toFile());
-        UploadedFile uploadedFile = new UploadedFile(inputStream, "GIF", 0, "example.gif", ".gif", 0);
         recordingUploadRequest.setRecording(uploadedFile);
         recordingUploadRequest.setName(uploadedFile.getFilename());
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
         recordingService.upload(user, recordingUploadRequest);
-        recordingService.getOne(1);
+        recordingService.getOne(user.getId());
     }
 
     @Test
-    public void givenUploadRequest_GetOneThrowsRecordingNotFoundException() throws ApiException {
+    public void givenUploadRequest_getOneThrowsRecordingNotFoundException() throws ApiException {
         var exception = assertThrows(RecordingNotFoundException.class, () -> recordingService.getOne(99));
         assertTrue(exception.getMessage().contains("Recording with id: 99 not found."));
     }
 
     @Test
-    public void givenUploadRequest_GetAllHappyPath() throws ApiException, FileNotFoundException {
-        var signupRequest = new UserSignupRequest();
-        signupRequest.setEmail("foo@bar.ch");
-        signupRequest.setPassword("hunter123");
-        var user = userService.create(signupRequest);
-
-        var userActivateRequest = new UserActivateRequest();
-        userActivateRequest.setEmail(Base64.getEncoder().encodeToString(user.getEmail().getBytes()));
-        userActivateRequest.setActivationCode(Base64.getEncoder().encodeToString(user.getActivationCode().getBytes()));
-        userService.activate(userActivateRequest);
-
-        var loginRequest = new LoginRequest();
-        loginRequest.setEmail("foo@bar.ch");
-        loginRequest.setPassword("hunter123");
-        authService.generateToken(loginRequest);
+    public void givenUploadRequest_getAllHappyPath() throws ApiException, FileNotFoundException {
+        var user = getUser();
+        var uploadedFile = getUpload();
 
         var recordingUploadRequest = new RecordingUploadRequest();
-        var path = Paths.get(config.getString("storage.recordings-path"), "example.gif");
-        InputStream inputStream = new FileInputStream(path.toFile());
-        UploadedFile uploadedFile = new UploadedFile(inputStream, "GIF", 0, "example.gif", ".gif", 0);
         recordingUploadRequest.setRecording(uploadedFile);
         recordingUploadRequest.setName(uploadedFile.getFilename());
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
+
 
         recordingService.upload(user, recordingUploadRequest);
         recordingService.getAll(user);
