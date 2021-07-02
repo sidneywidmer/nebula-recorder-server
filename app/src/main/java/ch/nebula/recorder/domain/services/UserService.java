@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 
+
 public class UserService {
     private final Hasher hasher;
     private final Generator generator;
@@ -56,7 +57,7 @@ public class UserService {
             throw new InvalidDataException(Map.of("_", "User doesnt exist"));
         }
         if (user.getWhenActivated() != null) {
-            throw new InvalidDataException(Map.of("-", "User already activated"));
+            throw new InvalidDataException(Map.of("_", "User already activated"));
         }
         if (!user.getActivationCode().equals(activate.getActivationCode())) {
             throw new InvalidDataException(Map.of("_", "Wrong activation code"));
