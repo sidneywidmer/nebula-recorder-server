@@ -32,7 +32,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 commit("auth_request");
                 axios({
-                    url: "/api/auth/login",
+                    url: "https://nebula.sidney.dev/api/auth/login",
                     data: user,
                     method: "POST"
                 })
@@ -40,6 +40,7 @@ export default new Vuex.Store({
                         const token = resp.data.token;
                         const user = resp.data.token;
                         localStorage.setItem("token", token);
+                        localStorage.setItem("email", user.email);
                         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
                         commit("auth_success", token, user);
                         resolve(resp);
@@ -54,7 +55,7 @@ export default new Vuex.Store({
         register({commit}, user) {
             return new Promise((resolve, reject) => {
                 commit('auth_request')
-                axios({url: '/api/user/signup', data: user, method: 'POST'})
+                axios({url: 'https://nebula.sidney.dev/api/user/signup', data: user, method: 'POST'})
                     .then(resp => {
                         /**
                          * do success

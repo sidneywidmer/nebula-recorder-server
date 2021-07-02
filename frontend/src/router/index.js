@@ -3,9 +3,8 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import LoginScreenComponent from "@/views/login/LoginScreenComponent";
 import RegisterScreenComponent from "@/views/register/RegisterScreenComponent";
-import Account from "@/views/account/Account";
-import ManageRecordings from "@/views/account/ManageRecordings";
 import AfterRegisterView from "@/views/register/AfterRegisterView";
+import RecordingDetail from "@/views/RecordingDetail";
 
 Vue.use(VueRouter);
 
@@ -14,15 +13,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
   {
     path: "/login",
@@ -40,14 +30,9 @@ const routes = [
     component: AfterRegisterView
   },
   {
-    path: "/account",
-    name: "account",
-    component: Account
-  },
-  {
-    path: "/account/recordings",
-    name: "manage recordings",
-    component: ManageRecordings
+    path: "/recording/:id",
+    name: "detail recording",
+    component: RecordingDetail
   }
 ];
 
