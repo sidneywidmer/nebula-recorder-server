@@ -118,7 +118,7 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
-        var recording = recordingService.upload(user, recordingUploadRequest);
+       var recording = recordingService.upload(user, recordingUploadRequest);
         var fetchedRecordings = recordingService.getAll(user);
         assertEquals(recording, fetchedRecordings.get(0));
     }
