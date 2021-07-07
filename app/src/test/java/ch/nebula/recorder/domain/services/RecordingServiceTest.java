@@ -14,6 +14,9 @@ import io.javalin.http.UploadedFile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -93,11 +96,9 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setDescription("this is a sample gif");
 
         var recording = recordingService.upload(user, recordingUploadRequest);
-        var recordingJson = recordingService.getOne(recording.getId());
+        var fetchedRecording = recordingService.getOne(recording.getId());
 
-        assert (recordingJson.contains(recording.getName()));
-        assert (recordingJson.contains(String.valueOf(recording.getId())));
-        assert (recordingJson.contains(String.format("/recordings/%s", recording.getName())));
+        assertEquals(recording, fetchedRecording);
     }
 
     @Test
@@ -118,10 +119,7 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setDescription("this is a sample gif");
 
         var recording = recordingService.upload(user, recordingUploadRequest);
-        var recordingJson = recordingService.getAll(user);
-
-        assert (recordingJson.contains(recording.getName()));
-        assert (recordingJson.contains(String.valueOf(recording.getId())));
-        assert (recordingJson.contains(String.format("/recordings/%s", recording.getName())));
+        var fetchedRecordings = recordingService.getAll(user);
+        assertEquals(recording, fetchedRecordings.get(0));
     }
 }
