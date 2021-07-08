@@ -37,7 +37,7 @@ public class Router implements Component {
             path("api/auth/check", () -> get(authController::check, roles(AUTHENTICATED)));
             path("api/recording/upload", () -> post(recordingController::upload, roles(AUTHENTICATED)));
             path("api/recording/list", () -> get(recordingController::getAll, roles(AUTHENTICATED)));
-            path("api/recording/:id", () -> get(recordingController::getOne, roles(AUTHENTICATED)));
+            path("api/recording/:uuid", () -> get(recordingController::getOne, roles(AUTHENTICATED)));
         });
     }
 }

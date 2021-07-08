@@ -32,7 +32,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 commit("auth_request");
                 axios({
-                    url: "https://nebula.sidney.dev/api/auth/login",
+                    url: "/api/auth/login",
                     data: user,
                     method: "POST"
                 })
@@ -55,7 +55,7 @@ export default new Vuex.Store({
         register({commit}, user) {
             return new Promise((resolve, reject) => {
                 commit('auth_request')
-                axios({url: 'https://nebula.sidney.dev/api/user/signup', data: user, method: 'POST'})
+                axios({url: '/api/user/signup', data: user, method: 'POST'})
                     .then(resp => {
                         /**
                          * do success

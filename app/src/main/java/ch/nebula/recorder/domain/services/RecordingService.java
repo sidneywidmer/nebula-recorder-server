@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class RecordingService {
     private final Config config;
@@ -31,22 +32,19 @@ public class RecordingService {
      */
     public Recording upload(User user, RecordingUploadRequest recordingUploadRequest) throws InvalidDataException {
         if (user == null) {
-            throw new InvalidDataException(Map.of("_", "Illegal State"));
+            throw new InvalidDataException(Map.of("_", "Illegal state"));
         }
 
-        var name = user.getId() + "-" + recordingUploadRequest.getName();
-        var recording = new QRecording().name.equalTo(name).findOne();
-        if (recording != null) {
-            throw new InvalidDataException(Map.of("_", "Recording already exists"));
-        }
+        var uuid = UUID.randomUUID();
+        var name = recordingUploadRequest.getName();
 
         var data = recordingUploadRequest.getRecording();
-        write(name, data);
+        write(uuid.toString() + ".gif", data);
 
         var description = recordingUploadRequest.getDescription();
         var recordingType = recordingUploadRequest.getType();
 
-        return create(name, recordingType, description, user);
+        return create(name, recordingType, description, user, uuid);
     }
 
     /**
@@ -59,10 +57,10 @@ public class RecordingService {
     /**
      * Get one specific recording by id.
      */
-    public Recording getOne(long id) throws RecordingNotFoundException {
-        var recording = new QRecording().id.equalTo(id).findOne();
+    public Recording getOne(UUID uuid) throws RecordingNotFoundException {
+        var recording = new QRecording().uuid.equalTo(uuid).findOne();
         if (recording == null) {
-            throw new RecordingNotFoundException(String.format("Recording with id: %d not found.", id));
+            throw new RecordingNotFoundException(String.format("Recording with id: %s not found.", uuid.toString()));
         }
 
         return recording;
@@ -73,8 +71,8 @@ public class RecordingService {
         FileUtil.streamToFile(data.getContent(), path.toString());
     }
 
-    private Recording create(String name, RecordingType recordingType, String description, User user) {
-        var recording = new Recording(name, recordingType, user);
+    private Recording create(String name, RecordingType recordingType, String description, User user, UUID uuid) {
+        var recording = new Recording(name, recordingType, user, uuid);
 
         if (description != null && !"".equals(description)) {
             recording.setDescription(description);

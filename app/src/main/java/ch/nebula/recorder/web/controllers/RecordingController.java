@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.lang.Long.parseLong;
 
@@ -58,7 +59,7 @@ public class RecordingController extends BaseController {
         var jsonArray = new JSONArray();
         for (Recording recording : recordings) {
             var jsonObject = new JSONObject()
-                    .put("id", recording.getId())
+                    .put("id", recording.getUUID())
                     .put("name", recording.getName())
                     .put("url", recording.getUrl());
 
@@ -69,9 +70,12 @@ public class RecordingController extends BaseController {
     }
 
     public void getOne(Context ctx) throws ApiException {
-        var id = ctx.pathParam("id");
-        var recording = recordingService.getOne(parseLong(id));
-
-        ctx.contentType("application/json").result(recording.toJson());
+        try {
+            var uuid = UUID.fromString(ctx.pathParam("uuid"));
+            var recording = recordingService.getOne(uuid);
+            ctx.contentType("application/json").result(recording.toJson());
+        } catch (IllegalArgumentException e) {
+            ctx.status(404);
+        }
     }
 }
