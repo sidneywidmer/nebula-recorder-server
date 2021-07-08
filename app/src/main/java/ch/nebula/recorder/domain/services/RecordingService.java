@@ -10,8 +10,6 @@ import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import com.typesafe.config.Config;
 import io.javalin.core.util.FileUtil;
 import io.javalin.http.UploadedFile;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
 import java.nio.file.Paths;

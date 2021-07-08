@@ -14,13 +14,12 @@ import io.javalin.http.UploadedFile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RecordingServiceTest extends BaseTest {
     private final RecordingService recordingService;
@@ -118,7 +117,7 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
-       var recording = recordingService.upload(user, recordingUploadRequest);
+        var recording = recordingService.upload(user, recordingUploadRequest);
         var fetchedRecordings = recordingService.getAll(user);
         assertEquals(recording, fetchedRecordings.get(0));
     }
