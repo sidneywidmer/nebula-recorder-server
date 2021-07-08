@@ -5,17 +5,22 @@ import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
 import ch.nebula.recorder.core.exceptions.RecordingNotFoundException;
+import ch.nebula.recorder.domain.models.Recording;
 import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.javalin.http.UploadedFile;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RecordingServiceTest extends BaseTest {
     private final RecordingService recordingService;
@@ -56,24 +61,10 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
-        recordingService.upload(user, recordingUploadRequest);
-    }
-
-    @Test
-    public void givenUploadRequest_throwsFileAlreadyExists() throws ApiException, IOException {
-        var user = getUser();
-        var uploadedFile = getUpload();
-
-        var recordingUploadRequest = new RecordingUploadRequest();
-        recordingUploadRequest.setRecording(uploadedFile);
-        recordingUploadRequest.setName(uploadedFile.getFilename());
-        recordingUploadRequest.setType(RecordingType.GIF);
-        recordingUploadRequest.setDescription("this is a sample gif");
-
-        recordingService.upload(user, recordingUploadRequest);
-
-        var exception = assertThrows(InvalidDataException.class, () -> recordingService.upload(user, recordingUploadRequest));
-        assertTrue(exception.getMessages().get("_").contains("Recording already exists"));
+        Recording recording = recordingService.upload(user, recordingUploadRequest);
+        assert (recording != null);
+        assert (recording.getName().contains(recordingUploadRequest.getName()));
+        assert (recordingUploadRequest.getDescription().equals(recording.getDescription()));
     }
 
     @Test
@@ -88,15 +79,17 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setDescription("this is a sample gif");
 
         var recording = recordingService.upload(user, recordingUploadRequest);
-        var recordingJson = recordingService.getOne(recording.getId());
+        var fetchedRecording = recordingService.getOne(recording.getUUID());
 
-        assert(recordingJson.contains(recording.getName()));
+        assertEquals(recording, fetchedRecording);
     }
 
     @Test
     public void givenUploadRequest_getOneThrowsRecordingNotFoundException() throws ApiException {
-        var exception = assertThrows(RecordingNotFoundException.class, () -> recordingService.getOne(99));
-        assertTrue(exception.getMessage().contains("Recording with id: 99 not found."));
+        // If this test ever fails because of a uuid collision i'll eat a broom
+        var uuid = UUID.randomUUID();
+        var exception = Assertions.assertThrows(RecordingNotFoundException.class, () -> recordingService.getOne(uuid));
+        assert ((exception.getMessage().contains("Recording with id: " + uuid.toString() + " not found.")));
     }
 
     @Test
@@ -110,8 +103,8 @@ public class RecordingServiceTest extends BaseTest {
         recordingUploadRequest.setType(RecordingType.GIF);
         recordingUploadRequest.setDescription("this is a sample gif");
 
-
-        recordingService.upload(user, recordingUploadRequest);
-        recordingService.getAll(user);
+        var recording = recordingService.upload(user, recordingUploadRequest);
+        var fetchedRecordings = recordingService.getAll(user);
+        assertEquals(recording, fetchedRecordings.get(0));
     }
 }

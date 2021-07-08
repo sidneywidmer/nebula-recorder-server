@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col col-md-6 offset-md-3">
-          <img style="width:100%;" :src="'https://nebula.sidney.dev' + this.content.singleRecording.url"/>
+          <img style="width:100%;" :src="this.content.singleRecording.url"/>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('https://nebula.sidney.dev/api/recording/' + this.content.id, {
+    axios.get('/api/recording/' + this.content.id, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }

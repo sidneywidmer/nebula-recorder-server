@@ -2,9 +2,11 @@ package ch.nebula.recorder.domain.models;
 
 import ch.nebula.recorder.core.RecordingType;
 import io.ebean.annotation.NotNull;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Entity
 @Table(name = "recordings")
@@ -24,10 +26,31 @@ public class Recording extends BaseModel {
     @NotNull
     User user;
 
-    public Recording(String name, RecordingType recordingType, User user) {
+    @NotNull
+    UUID uuid;
+
+    public Recording(String name, RecordingType recordingType, User user, UUID uuid) {
         this.name = name;
         this.recordingType = recordingType;
         this.user = user;
+        this.uuid = uuid;
+    }
+
+    public String getUrl() {
+        return "/recordings/" + getFileName();
+    }
+
+    public String getFileName() {
+        return uuid.toString() + ".gif";
+    }
+
+    public String toJson() {
+        var jsonObject = new JSONObject()
+                .put("id", getUUID())
+                .put("name", getName())
+                .put("url", getUrl());
+
+        return jsonObject.toString(1);
     }
 
     public String getName() {
@@ -60,5 +83,13 @@ public class Recording extends BaseModel {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setUUID(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public UUID getUUID() {
+        return uuid;
     }
 }

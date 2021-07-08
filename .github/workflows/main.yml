@@ -5,11 +5,6 @@ on:
       - master
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-  DB_USER: none
-  DB_PASSWORD: none
-  DB_URL: none
-  JWT_SECRET: none
-  MAILGUN_APIKEY:  none
 
 jobs:
   test:
@@ -23,7 +18,7 @@ jobs:
           distribution: 'adopt'
       - name: Add config file
         run: cp app/src/main/resources/app.ghaction.conf app/src/main/resources/app.conf
-      - name: Build with Gradle
+      - name: Run gradle tests
         run: ./gradlew test
 
   deploy:

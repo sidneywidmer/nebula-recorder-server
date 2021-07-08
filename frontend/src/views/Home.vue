@@ -56,7 +56,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('https://nebula.sidney.dev/api/recording/list', {
+    axios.get('/api/recording/list', {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }

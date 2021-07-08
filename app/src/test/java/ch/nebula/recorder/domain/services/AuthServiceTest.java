@@ -16,8 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Base64;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 public class AuthServiceTest extends BaseTest {
     private final AuthService authService;
     private final UserService userService;
@@ -46,7 +44,7 @@ public class AuthServiceTest extends BaseTest {
         loginRequest.setEmail("foo@bar.ch");
         loginRequest.setPassword("hunter123");
 
-        Assertions.assertNotNull(authService.generateToken(loginRequest));
+        assert ((authService.generateToken(loginRequest) != null));
     }
 
     @Test
@@ -55,7 +53,7 @@ public class AuthServiceTest extends BaseTest {
         loginRequest.setEmail("foo@bar.ch");
         loginRequest.setPassword("hunter123");
 
-        assertThrows(PermissionDeniedException.class, () -> authService.generateToken(loginRequest));
+        Assertions.assertThrows(PermissionDeniedException.class, () -> authService.generateToken(loginRequest));
     }
 
     @Test
@@ -69,7 +67,7 @@ public class AuthServiceTest extends BaseTest {
         loginRequest.setEmail("foo@bar.ch");
         loginRequest.setPassword("hunter123");
 
-        assertThrows(PermissionDeniedException.class, () -> authService.generateToken(loginRequest));
+        Assertions.assertThrows(PermissionDeniedException.class, () -> authService.generateToken(loginRequest));
     }
 
     @Test
@@ -94,7 +92,7 @@ public class AuthServiceTest extends BaseTest {
         var header = "Bearer " + generatedToken;
         var decodedToken = authService.getJWTFromHeader(header);
 
-        Assertions.assertEquals(generatedToken, decodedToken.getToken());
+        assert ((generatedToken.equals(decodedToken.getToken())));
     }
 
     @Test
@@ -112,7 +110,7 @@ public class AuthServiceTest extends BaseTest {
         var generatedToken = "";
 
         var header = "Bearer " + generatedToken;
-        assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(header));
+        Assertions.assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(header));
     }
 
     @Test
@@ -134,17 +132,17 @@ public class AuthServiceTest extends BaseTest {
         var generatedToken = authService.generateToken(loginRequest);
 
         var header = "NoBearer " + generatedToken;
-        assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(header));
+        Assertions.assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(header));
     }
 
     @Test
     public void givenHeader_getJWTFromHeaderThrowsVerificationException() {
         var header = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-        assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(header));
+        Assertions.assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(header));
     }
 
     @Test
     public void givenHeader_getJWTFromHeaderThrowsTokenIsNull() {
-        assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(null));
+        Assertions.assertThrows(PermissionDeniedException.class, () -> authService.getJWTFromHeader(null));
     }
 }

@@ -9,13 +9,11 @@ import ch.nebula.recorder.domain.models.User;
 import ch.nebula.recorder.domain.models.query.QUser;
 import ch.nebula.recorder.domain.requests.UserActivateRequest;
 import ch.nebula.recorder.domain.requests.UserSignupRequest;
-import ch.nebula.recorder.domain.services.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.Base64;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest extends BaseTest {
     private final UserService service;
@@ -32,7 +30,7 @@ public class UserServiceTest extends BaseTest {
 
         var user = service.create(request);
 
-        assertEquals(request.getEmail(), user.getEmail());
+        assert (request.getEmail().equals(user.getEmail()));
     }
 
     @Test
@@ -43,8 +41,8 @@ public class UserServiceTest extends BaseTest {
 
         service.create(request);
 
-        var exception = assertThrows(InvalidDataException.class, () -> service.create(request));
-        assertTrue(exception.getMessages().get("_").contains("User already exists"));
+        var exception = Assertions.assertThrows(InvalidDataException.class, () -> service.create(request));
+        assert ((exception.getMessages().get("_").contains("User already exists")));
     }
 
     @Test
@@ -59,7 +57,7 @@ public class UserServiceTest extends BaseTest {
 
         service.activate(request);
         var user = new QUser().email.equalTo("foo@bar.ch").findOne();
-        assertNotNull(user.getWhenActivated());
+        assert ((user.getWhenActivated() != null));
     }
 
     @Test
@@ -68,8 +66,8 @@ public class UserServiceTest extends BaseTest {
         request.setEmail(Base64.getEncoder().encodeToString("foo@bar.ch".getBytes()));
         request.setActivationCode(Base64.getEncoder().encodeToString("ABC".getBytes()));
 
-        var exception = assertThrows(InvalidDataException.class, () -> service.activate(request));
-        assertTrue(exception.getMessages().get("_").contains("User doesnt exist"));
+        var exception = Assertions.assertThrows(InvalidDataException.class, () -> service.activate(request));
+        assert ((exception.getMessages().get("_").contains("User doesnt exist")));
     }
 
     @Test
@@ -83,8 +81,8 @@ public class UserServiceTest extends BaseTest {
         request.setEmail(Base64.getEncoder().encodeToString("foo@bar.ch".getBytes()));
         request.setActivationCode(Base64.getEncoder().encodeToString("ABC".getBytes()));
 
-        var exception = assertThrows(InvalidDataException.class, () -> service.activate(request));
-        assertTrue(exception.getMessages().get("_").contains("User already activated"));
+        var exception = Assertions.assertThrows(InvalidDataException.class, () -> service.activate(request));
+        assert ((exception.getMessages().get("_").contains("User already activated")));
     }
 
     @Test
@@ -97,7 +95,7 @@ public class UserServiceTest extends BaseTest {
         request.setEmail(Base64.getEncoder().encodeToString("foo@bar.ch".getBytes()));
         request.setActivationCode(Base64.getEncoder().encodeToString("DEF".getBytes()));
 
-        var exception = assertThrows(InvalidDataException.class, () -> service.activate(request));
-        assertTrue(exception.getMessages().get("_").contains("Wrong activation code"));
+        var exception = Assertions.assertThrows(InvalidDataException.class, () -> service.activate(request));
+        assert ((exception.getMessages().get("_").contains("Wrong activation code")));
     }
 }

@@ -3,14 +3,18 @@ package ch.nebula.recorder.web.controllers;
 import ch.nebula.recorder.core.RecordingType;
 import ch.nebula.recorder.core.exceptions.ApiException;
 import ch.nebula.recorder.core.exceptions.InvalidDataException;
+import ch.nebula.recorder.domain.models.Recording;
 import ch.nebula.recorder.domain.requests.RecordingUploadRequest;
 import ch.nebula.recorder.domain.services.RecordingService;
 import io.javalin.http.Context;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.lang.Long.parseLong;
 
@@ -44,29 +48,34 @@ public class RecordingController extends BaseController {
             throw new InvalidDataException(violations);
         }
 
-        recordingService.upload(ctx.attribute("user"), recordingUploadRequest);
+        var recording = recordingService.upload(ctx.attribute("user"), recordingUploadRequest);
 
-        ctx.status(200);
+        ctx.contentType("application/json").result(recording.toJson());
     }
 
     public void getAll(Context ctx) throws ApiException {
         var recordings = recordingService.getAll(ctx.attribute("user"));
 
-        ctx.contentType("application/json").result(recordings);
+        var jsonArray = new JSONArray();
+        for (Recording recording : recordings) {
+            var jsonObject = new JSONObject()
+                    .put("id", recording.getUUID())
+                    .put("name", recording.getName())
+                    .put("url", recording.getUrl());
+
+            jsonArray.put(jsonObject);
+        }
+
+        ctx.contentType("application/json").result(jsonArray.toString(1));
     }
 
     public void getOne(Context ctx) throws ApiException {
-        var id = ctx.pathParam("id");
-        var recording = recordingService.getOne(parseLong(id));
-
-        ctx.contentType("application/json").result(recording);
-    }
-
-    /**
-     * Tries to map the given ctx.body to our clazz and if this succeeds we trigger
-     * bean validation. If all goes well a clazz instance is returned.
-     */
-    protected <T> T validateUpload(Context ctx, Class<T> clazz) throws ApiException {
-        return validateData(ctx.body(), clazz);
+        try {
+            var uuid = UUID.fromString(ctx.pathParam("uuid"));
+            var recording = recordingService.getOne(uuid);
+            ctx.contentType("application/json").result(recording.toJson());
+        } catch (IllegalArgumentException e) {
+            ctx.status(404);
+        }
     }
 }

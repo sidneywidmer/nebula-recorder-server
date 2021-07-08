@@ -1,6 +1,6 @@
 <template>
   <router-link :to="'/recording/' + item.id">
-    <img style="width:100%;" :src="'https://nebula.sidney.dev' + item.url"/>
+    <img style="width:100%;" :src="item.url"/>
     <div class="icon">
       <ion-icon name="play-outline"></ion-icon>
     </div>

@@ -13,8 +13,8 @@ public class GenerateDbMigration {
      */
     public static void main(String[] args) throws IOException {
         var dbMigration = DbMigration.create();
+        dbMigration.setStrictMode(false);
         dbMigration.setPlatform(Platform.POSTGRES);
-
         dbMigration.generateMigration();
     }
 }
