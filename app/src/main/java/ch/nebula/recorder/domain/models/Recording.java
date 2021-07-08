@@ -2,6 +2,7 @@ package ch.nebula.recorder.domain.models;
 
 import ch.nebula.recorder.core.RecordingType;
 import io.ebean.annotation.NotNull;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -28,6 +29,19 @@ public class Recording extends BaseModel {
         this.name = name;
         this.recordingType = recordingType;
         this.user = user;
+    }
+
+    public String getUrl() {
+        return "/recordings/" + getName();
+    }
+
+    public String toJson() {
+        var jsonObject = new JSONObject()
+                .put("id", getId())
+                .put("name", getName())
+                .put("url", getUrl());
+
+        return jsonObject.toString(1);
     }
 
     public String getName() {
